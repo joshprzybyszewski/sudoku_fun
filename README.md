@@ -6,12 +6,16 @@ A sudoku solver using Go.
 Simple! Forget about storage space and care only about speed!
 
 ## What we store on each `Puzzle`:
- - the entry in each tile. Represented as an `Entry` == `uint8`
- - the total number of entries placed in the puzzle. Represented as an int so that we know when we have a solved puzzle
- - the entries present in each row. Represented as bits where `1 << 0` means 1 is present, `1 << 1` means 2 is present, etc.
- - the entries present in each column. Represented the same way.
- - the entries present in each, you guessed it, box.
- - the number of open spots in each row. This is an int, and we cache this so that we don't have to calculate it based on the present entries bit string every time we need it.
+ - the entry in each tile.
+   - Represented as an `Entry` which is a `uint8`. We only need numbers 0 through 9, since 0 is an empty Tile.
+ - the total number of entries placed in the puzzle.
+   - Represented as an int so that we know when we have a solved puzzle
+ - the entries present in each row.
+   - Represented as bits where `1 << 0` means 1 is present, `1 << 1` means 2 is present, etc.
+ - the entries present in each column.
+ - the entries present in each box.
+ - the number of open spots in each row.
+   - This is a `uint8`, and we cache this so that we don't have to calculate it based on the present entries bit string every time we need it.
  - the number of open spots in each col.
  - the number of open spots in each box.
  
