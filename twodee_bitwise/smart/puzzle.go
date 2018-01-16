@@ -1,13 +1,12 @@
 package smart
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/pkg/errors"
 
 	"../../utils/constants"
-	utils "../../utils/speed"
+	speedUtils "../../utils/speed"
 	"../../utils/types"
 )
 
@@ -54,7 +53,7 @@ func ReadSudoku(str string) (p Puzzle, err error) {
 
 		row := i / constants.SideLen
 		col := i % constants.SideLen
-		box, err := utils.GetBox(row, col)
+		box, err := speedUtils.GetBox(row, col)
 		if wasPlaced, err := pzl.place(row, col, box, types.Entry(entry)); err != nil || !wasPlaced {
 			return Puzzle{}, errors.New(`BAD sudoku!!!`)
 		}
@@ -127,52 +126,16 @@ func (p *Puzzle) clone() *Puzzle {
 
 func (p *Puzzle) getLocationAndEntries() (row, col, box int, entries []types.Entry, err error) {
 	row, col, box, _ = p.getEmptyTile()
-	//if err != nil {
-	//	return -1, -1, -1, nil, errors.New(`no empty tile found`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
-	//}
 
 	entries, err = p.getEntries(row, col, box)
 	if err != nil {
-		//p.PrintPretty()
-		return -1, -1, -1, nil, errors.New(`no entries possible`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
+		return -1, -1, -1, nil, err
 	}
 
 	return row, col, box, entries, nil
 }
 
-func (p *Puzzle) getEntries(row, col, box int) ([]types.Entry, error) {
-	//return p.stupidGetEntries(row, col, box)
-	return p.quickGetEntries(row, col, box)
-}
-func (p *Puzzle) stupidGetEntries(row, col, box int) ([]types.Entry, error) {
-	entries := constants.AllEntries
-	entries = utils.GetPossibleEntries(entries, p.rows[row])
-	entries = utils.GetPossibleEntries(entries, p.cols[col])
-	entries = utils.GetPossibleEntries(entries, p.boxs[box])
-
-	if len(entries) == 0 {
-		//p.PrintPretty()
-		return nil, errors.New(`no entries possible`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
-	}
-
-	return entries, nil
-}
-func (p *Puzzle) quickGetEntries(row, col, box int) ([]types.Entry, error) {
-	entries := utils.GetPossibleEntriesQuickly(p.rows[row], p.cols[col], p.boxs[box])
-
-	if len(entries) == 0 {
-		//p.PrintPretty()
-		return nil, errors.New(`no entries possible`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
-	}
-
-	return entries, nil
-}
-
 func (p *Puzzle) getEmptyTile() (row, col, box int, err error) {
-	return p.getBestLocationSmartly()
-}
-
-func (p *Puzzle) getBestLocationSmartly() (row, col, box int, err error) {
 	bkRow := types.NewBK()
 	bkCol := types.NewBK()
 	bkBox := types.NewBK()
@@ -206,7 +169,7 @@ func (p *Puzzle) getBestCol(bestRowIndex int, bkCol, bkBox *types.BestKnown) {
 			continue
 		}
 
-		b, _ := utils.GetBox(bestRowIndex, c)
+		b, _ := speedUtils.GetBox(bestRowIndex, c)
 
 		if p.numFreeInBox[b] == 0 {
 			continue
@@ -228,7 +191,7 @@ func (p *Puzzle) getBestRow(bestColIndex int, bkRow, bkBox *types.BestKnown) {
 			continue
 		}
 
-		b, _ := utils.GetBox(r, bestColIndex)
+		b, _ := speedUtils.GetBox(r, bestColIndex)
 
 		if p.numFreeInBox[b] == 0 {
 			continue
@@ -239,10 +202,20 @@ func (p *Puzzle) getBestRow(bestColIndex int, bkRow, bkBox *types.BestKnown) {
 	}
 }
 
+func (p *Puzzle) getEntries(row, col, box int) ([]types.Entry, error) {
+	entries := speedUtils.GetPossibleEntriesQuickly(p.rows[row], p.cols[col], p.boxs[box])
+
+	if len(entries) == 0 {
+		return nil, errors.New(`no entries possible`)
+	}
+
+	return entries, nil
+}
+
 func (p *Puzzle) place(row, col, box int, entry types.Entry) (bool, error) {
 	numPlacements++
 
-	ePresence := utils.PresenceOf(entry)
+	ePresence := speedUtils.PresenceOf(entry)
 
 	if err := p.entryIsPresent(row, col, box, ePresence); err != nil {
 		return false, err
@@ -264,41 +237,13 @@ func (p *Puzzle) place(row, col, box int, entry types.Entry) (bool, error) {
 }
 
 func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) error {
-	return p.entryIsPresentQuickly(row, col, box, ePresence)
-	//return p.entryIsPresentSlowly(row, col, box, ePresence)
-}
-func (p *Puzzle) entryIsPresentSlowly(row, col, box int, ePresence types.Presence) error {
-	if p.tiles[row][col] != constants.EmptyTile {
-		return errors.New(fmt.Sprintf("Tile already exists at (%v, %v)", row, col))
-	}
-
-	if ePresence == constants.PresenceError {
-		return errors.New(fmt.Sprintf(`Bad Entry Presence: %09b`, ePresence))
-	}
-
-	if utils.IsPresent(p.rows[row], ePresence) {
-		return errors.New(fmt.Sprintf("Tile already exists in row %v", row))
-	}
-
-	if utils.IsPresent(p.cols[col], ePresence) {
-		return errors.New(fmt.Sprintf("Tile already exists in col %v", col))
-	}
-
-	if utils.IsPresent(p.boxs[box], ePresence) {
-		return errors.New(fmt.Sprintf("Tile already exists in box %v", box))
-	}
-
-	return nil
-}
-func (p *Puzzle) entryIsPresentQuickly(row, col, box int, ePresence types.Presence) error {
-	if utils.IsPresent(p.rows[row]|p.cols[col]|p.boxs[box], ePresence) {
+	if speedUtils.IsPresent(p.rows[row]|p.cols[col]|p.boxs[box], ePresence) {
 		return errors.New(`its present`)
 	}
 
 	return nil
 }
 
-/// Solves in 9.4802ms on average, with 4,585 average tries
 func (p *Puzzle) solve() (solution *Puzzle, err error) {
 	row, col, box, entries, err := p.getLocationAndEntries()
 	if err != nil {
