@@ -1,10 +1,10 @@
 package naive
 
 import (
-	brute "../../utils"
-	"../../utils/constants"
-	utils "../../utils/slow"
-	"../../utils/types"
+	brute "github.com/joshprzybyszewski/sudoku_fun/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 
 	"fmt"
 	"testing"

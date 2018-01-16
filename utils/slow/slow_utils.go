@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 
-	"../constants"
-	"../types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 func GetPossibleEntries(entries []types.Entry, presence types.Presence) []types.Entry {

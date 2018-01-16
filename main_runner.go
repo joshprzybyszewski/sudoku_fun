@@ -9,12 +9,12 @@ import (
 	"sort"
 	"time"
 
-	twodee "./twodee_bitwise"
-	"./twodee_bitwise/naive"
-	"./twodee_bitwise/robust"
-	"./twodee_bitwise/smart"
-	"./utils"
-	"./utils/types"
+	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/naive"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/robust"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/smart"
+	"github.com/joshprzybyszewski/sudoku_fun/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 var (
