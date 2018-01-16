@@ -50,10 +50,11 @@ func runTestForAllPuzzles(slvr puzzleSolver) {
 
 	for i := 1;; i++ {
 		line, _, err := bfp.ReadLine()
-		if err == io.EOF {
+		if err == io.EOF || i > 2 {
 			break
 		}
 		aaaaaahhhhhhh(err)
+		println(string(line))
 
 		dur, num, str := slvr(string(line))
 		pi := puzzleInfo{dur, num, str, i}
@@ -72,6 +73,7 @@ func printEveryPuzzle() {
 	for i, pzl := range byPuzzleNumber {
 		actuallySolved := utils.BruteForceCheck(pzl.solutionStr)
 		println(fmt.Sprintf("Solved (%v) Puzzle #%v in \t%9.4fms with \t%6v tries", actuallySolved, i, float64(pzl.duration.Nanoseconds()) / 1000000.0, pzl.numPlacements))
+		println(pzl.solutionStr)
 	}
 
 }

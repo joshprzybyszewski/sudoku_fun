@@ -7,6 +7,8 @@ import (
 	//"./naive"
 	"./smart"
 	"../utils"
+	"../utils/constants"
+	"../utils/types"
 )
 
 func PuzzleSolver(sudokuPuzzle string) (*time.Duration, int, string) {
@@ -22,23 +24,23 @@ func PuzzleSolver(sudokuPuzzle string) (*time.Duration, int, string) {
 
 	if err != nil {
 		println(fmt.Sprintf("COULDN'T SOLVE: %v", err.Error()))
-		return nil, -1, utils.EmptyPuzzle
+		return nil, -1, constants.EmptyPuzzle
 	}
 
 	if !utils.BruteForceCheck(solution.GetSimple()) {
 		solution.PrintPretty()
 		println(`WARNING IT DIDN'T ACTUALLY SOLVE'`)
-		return nil, -1, utils.EmptyPuzzle
+		return nil, -1, constants.EmptyPuzzle
 	}
 
 	return &duration, solution.GetNumPlacements(), solution.GetSimple()
 }
 
-func readSudoku(entries string) (s utils.Sudoku, err error) {
+func readSudoku(entries string) (s types.Sudoku, err error) {
 	pzl, err := smart.ReadSudoku(entries)
 	if err != nil {
 		return nil, err
 	}
 
-	return utils.Sudoku(pzl), nil
+	return types.Sudoku(pzl), nil
 }

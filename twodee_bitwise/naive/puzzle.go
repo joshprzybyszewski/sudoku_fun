@@ -6,7 +6,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"../../utils"
+	//"../../utils"
+	"../../utils/constants"
+	"../../utils/types"
+	utils "../../utils/slow"
 )
 
 var numPlacements int
@@ -14,27 +17,29 @@ var numPlacements int
 type Puzzle struct {
 	numPlaced int
 
-	tiles [utils.SideLen][utils.SideLen]utils.Tile /* [row][col] */
+	tiles [constants.SideLen][constants.SideLen]types.Tile /* [row][col] */
 
-	rows [utils.SideLen]utils.Presence
-	cols [utils.SideLen]utils.Presence
-	boxs [utils.SideLen]utils.Presence
+	rows [constants.SideLen]types.Presence
+	cols [constants.SideLen]types.Presence
+	boxs [constants.SideLen]types.Presence
 }
 
 /// Reads in sudoku from a string representation of it
 func ReadSudoku(entries string) (p Puzzle, err error) {
+	numPlacements = 0
+
 	pzl := Puzzle{}
 	for i := 0; i < len(entries); i++ {
 		entryChar := string(entries[i])
 		entry, err := strconv.Atoi(entryChar)
 
-		if entryChar == utils.EmptyTileChar || err != nil {
+		if entryChar == constants.EmptyTileChar || err != nil {
 			continue
 		}
 
-		row := i / utils.SideLen
-		col := i % utils.SideLen
-		if wasPlaced, err := pzl.place(row, col, utils.Entry(entry)); err != nil || !wasPlaced {
+		row := i / constants.SideLen
+		col := i % constants.SideLen
+		if wasPlaced, err := pzl.place(row, col, types.Entry(entry)); err != nil || !wasPlaced {
 			return Puzzle{}, errors.New(`BAD sudoku!!!`)
 		}
 	}
@@ -50,8 +55,8 @@ func (p Puzzle) GetSimple() string {
 
 	for r := range p.tiles {
 		for c := range p.tiles[r] {
-			if p.tiles[r][c] == utils.EmptyTile {
-				line += utils.EmptyTileChar
+			if p.tiles[r][c] == constants.EmptyTile {
+				line += constants.EmptyTileChar
 			} else {
 				line += strconv.Itoa(int(p.tiles[r][c]))
 			}
@@ -70,8 +75,8 @@ func (p Puzzle) PrintPretty() {
 		for c := range p.tiles[r] {
 			line += ` `
 
-			if p.tiles[r][c] == utils.EmptyTile {
-				line += utils.EmptyTileChar
+			if p.tiles[r][c] == constants.EmptyTile {
+				line += constants.EmptyTileChar
 			} else {
 				line += strconv.Itoa(int(p.tiles[r][c]))
 			}
@@ -90,7 +95,7 @@ func (p Puzzle) PrintPretty() {
 		}
 	}
 }
-func (p Puzzle) Solve() (solution utils.Sudoku, err error) {
+func (p Puzzle) Solve() (solution types.Sudoku, err error) {
 	numPlacements = 0
 
 	return p.solve()
@@ -107,7 +112,7 @@ func (p *Puzzle) clone() *Puzzle {
 		}
 	}
 
-	for i := 0; i < utils.SideLen; i++ {
+	for i := 0; i < constants.SideLen; i++ {
 		clone.rows[i] = p.rows[i]
 		clone.cols[i] = p.cols[i]
 		clone.boxs[i] = p.boxs[i]
@@ -116,7 +121,7 @@ func (p *Puzzle) clone() *Puzzle {
 	return &clone
 }
 
-func (p *Puzzle) getLocationAndEntries() (row, col int, entries []utils.Entry, err error) {
+func (p *Puzzle) getLocationAndEntries() (row, col int, entries []types.Entry, err error) {
 	row, col, err = p.getEmptyTile()
 	if err != nil {
 		return -1, -1, nil, err
@@ -127,7 +132,7 @@ func (p *Puzzle) getLocationAndEntries() (row, col int, entries []utils.Entry, e
 		return -1, -1, nil, err
 	}
 
-	entries = utils.AllEntries
+	entries = constants.AllEntries
 	entries = utils.GetPossibleEntries(entries, p.rows[row])
 	entries = utils.GetPossibleEntries(entries, p.cols[col])
 	entries = utils.GetPossibleEntries(entries, p.boxs[box])
@@ -146,12 +151,12 @@ func (p *Puzzle) getLocationAndEntries() (row, col int, entries []utils.Entry, e
 /// Average Number of Placements: 91718
 func (p *Puzzle) getEmptyTile() (row, col int, err error) {
 	for r := range p.tiles {
-		if p.rows[r] == utils.FullPresence {
+		if p.rows[r] == constants.FullPresence {
 			continue
 		}
 
 		for c := range p.tiles[r] {
-			if p.tiles[r][c] == utils.EmptyTile {
+			if p.tiles[r][c] == constants.EmptyTile {
 				return r, c, nil
 			}
 		}
@@ -159,10 +164,10 @@ func (p *Puzzle) getEmptyTile() (row, col int, err error) {
 	return -1, -1, errors.New(`There are no empty tiles!`)
 }
 
-func (p *Puzzle) place(row, col int, entry utils.Entry) (bool, error) {
+func (p *Puzzle) place(row, col int, entry types.Entry) (bool, error) {
 	numPlacements++
 
-	if p.tiles[row][col] != utils.EmptyTile {
+	if p.tiles[row][col] != constants.EmptyTile {
 		return false, errors.New(fmt.Sprintf("Tile already exists at (%v, %v)", row, col))
 	}
 
@@ -172,7 +177,7 @@ func (p *Puzzle) place(row, col int, entry utils.Entry) (bool, error) {
 	}
 
 	ePresence := utils.PresenceOf(entry)
-	if ePresence == utils.PresenceError {
+	if ePresence == constants.PresenceError {
 		return false, errors.New(fmt.Sprintf("Invalid entry conversion to presence: %v", entry))
 	}
 
@@ -188,7 +193,7 @@ func (p *Puzzle) place(row, col int, entry utils.Entry) (bool, error) {
 		return false, errors.New(fmt.Sprintf("Tile already exists in box %v", box))
 	}
 
-	p.tiles[row][col] = utils.Tile(entry)
+	p.tiles[row][col] = types.Tile(entry)
 
 	p.rows[row] |= ePresence
 	p.cols[col] |= ePresence
@@ -200,7 +205,7 @@ func (p *Puzzle) place(row, col int, entry utils.Entry) (bool, error) {
 }
 
 func (p *Puzzle) solve() (solution *Puzzle, err error) {
-	if p.numPlaced == utils.NumTiles {
+	if p.numPlaced == constants.NumTiles {
 		return p, nil
 	}
 

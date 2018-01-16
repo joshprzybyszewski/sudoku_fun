@@ -1,4 +1,4 @@
-package smart
+package robust
 
 import (
 	"strconv"
@@ -6,10 +6,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	utils "../../utils/speed"
+	utils "../../utils/slow"
 	"../../utils/types"
 	"../../utils/constants"
 )
+
+//TODO make this file robust
 
 var numPlacements int
 
@@ -141,24 +143,13 @@ func (p *Puzzle) getLocationAndEntries() (row, col, box int, entries []types.Ent
 }
 
 func (p *Puzzle) getEntries(row, col, box int) ([]types.Entry, error) {
-	//return p.stupidGetEntries(row, col, box)
-	return p.quickGetEntries(row, col, box)
+	return p.slowlyGetEntries(row, col, box)
 }
-func (p *Puzzle) stupidGetEntries(row, col, box int) ([]types.Entry, error) {
+func (p *Puzzle) slowlyGetEntries(row, col, box int) ([]types.Entry, error) {
 	entries := constants.AllEntries
 	entries = utils.GetPossibleEntries(entries, p.rows[row])
 	entries = utils.GetPossibleEntries(entries, p.cols[col])
 	entries = utils.GetPossibleEntries(entries, p.boxs[box])
-
-	if len(entries) == 0 {
-		//p.PrintPretty()
-		return nil, errors.New(`no entries possible`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
-	}
-
-	return entries, nil
-}
-func (p *Puzzle) quickGetEntries(row, col, box int) ([]types.Entry, error) {
-	entries := utils.GetPossibleEntriesQuickly(p.rows[row], p.cols[col], p.boxs[box])
 
 	if len(entries) == 0 {
 		//p.PrintPretty()
