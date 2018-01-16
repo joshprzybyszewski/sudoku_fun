@@ -10,16 +10,52 @@ import (
 	"time"
 
 	twodee "./twodee_bitwise"
+	"./twodee_bitwise/naive"
+	"./twodee_bitwise/robust"
+	"./twodee_bitwise/smart"
 	"./utils"
+	"./utils/types"
 )
 
 var (
 	filePath = flag.String(`sudokuInput`, `example-puzzles/puzzles.sk`, `path of file containing puzzles`)
 
-	byTime          = map[int64]puzzleInfo{}
-	byNumPlacements = map[int]puzzleInfo{}
-	byPuzzleNumber  = map[int]puzzleInfo{}
+	naivePerfomance  = &algoPerformance{naiveRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	smartPerfomance  = &algoPerformance{smartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	robustPerfomance = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 )
+
+func naiveRead(entries string) (s types.Sudoku, err error) {
+	pzl, err := naive.ReadSudoku(entries)
+	if err != nil {
+		return nil, err
+	}
+
+	return types.Sudoku(pzl), nil
+}
+func smartRead(entries string) (s types.Sudoku, err error) {
+	pzl, err := smart.ReadSudoku(entries)
+	if err != nil {
+		return nil, err
+	}
+
+	return types.Sudoku(pzl), nil
+}
+func robustRead(entries string) (s types.Sudoku, err error) {
+	pzl, err := robust.ReadSudoku(entries)
+	if err != nil {
+		return nil, err
+	}
+
+	return types.Sudoku(pzl), nil
+}
+
+type algoPerformance struct {
+	readPuzzle      twodee.SudokuReader
+	byTime          map[int64]puzzleInfo
+	byNumPlacements map[int]puzzleInfo
+	byPuzzleNumber  map[int]puzzleInfo
+}
 
 type puzzleInfo struct {
 	duration      *time.Duration
@@ -28,7 +64,7 @@ type puzzleInfo struct {
 	puzzleNumber  int
 }
 
-type puzzleSolver func(singleLinePzl string) (executionTime *time.Duration, numPlacements int, solutionString string)
+type puzzleSolver func(readPuzzle twodee.SudokuReader, singleLinePzl string) (executionTime *time.Duration, numPlacements int, solutionString string)
 
 func aaaaaahhhhhhh(err error) {
 	if err != nil {
@@ -37,10 +73,22 @@ func aaaaaahhhhhhh(err error) {
 }
 
 func main() {
-	runTestForAllPuzzles(twodee.PuzzleSolver)
+	runTestForAllPuzzles(naivePerfomance, twodee.PuzzleSolver)
+	println(`finished naive!`)
+	runTestForAllPuzzles(smartPerfomance, twodee.PuzzleSolver)
+	println(`finished smart!`)
+	runTestForAllPuzzles(robustPerfomance, twodee.PuzzleSolver)
+	println(`finished robust!`)
+
+	println(`NAIVE STATS`)
+	naivePerfomance.printPerformanceStats()
+	println(`SMART STATS`)
+	smartPerfomance.printPerformanceStats()
+	println(`ROBUST STATS`)
+	robustPerfomance.printPerformanceStats()
 }
 
-func runTestForAllPuzzles(slvr puzzleSolver) {
+func runTestForAllPuzzles(ap *algoPerformance, slvr puzzleSolver) {
 	flag.Parse()
 
 	fp, err := os.Open(*filePath)
@@ -55,31 +103,32 @@ func runTestForAllPuzzles(slvr puzzleSolver) {
 		}
 		aaaaaahhhhhhh(err)
 
-		dur, num, str := slvr(string(line))
+		dur, num, str := slvr(ap.readPuzzle, string(line))
 		pi := puzzleInfo{dur, num, str, i}
-		byTime[dur.Nanoseconds()] = pi
-		byNumPlacements[num] = pi
-		byPuzzleNumber[i] = pi
+		ap.byTime[dur.Nanoseconds()] = pi
+		ap.byNumPlacements[num] = pi
+		ap.byPuzzleNumber[i] = pi
 	}
-
-	printEveryPuzzle()
-	printAverages()
-	printWorstByTime()
-	printWorstByTrials()
 }
 
-func printEveryPuzzle() {
-	for i, pzl := range byPuzzleNumber {
+func (ap *algoPerformance) printPerformanceStats() {
+	//ap.printEveryPuzzle()
+	ap.printAverages()
+	ap.printWorstByTime()
+	ap.printWorstByTrials()
+}
+func (ap *algoPerformance) printEveryPuzzle() {
+	for i, pzl := range ap.byPuzzleNumber {
 		actuallySolved := utils.BruteForceCheck(pzl.solutionStr)
 		println(fmt.Sprintf("Solved (%v) Puzzle #%v in \t%9.4fms with \t%6v tries", actuallySolved, i, float64(pzl.duration.Nanoseconds())/1000000.0, pzl.numPlacements))
 	}
 
 }
-func printAverages() {
+func (ap *algoPerformance) printAverages() {
 	total := 0
 	totalDur := int64(0)
 	totalNumPlaces := 0
-	for _, pi := range byPuzzleNumber {
+	for _, pi := range ap.byPuzzleNumber {
 		total++
 		totalDur += pi.duration.Nanoseconds()
 		totalNumPlaces += pi.numPlacements
@@ -93,12 +142,12 @@ func printAverages() {
 	println(fmt.Sprintf("Average # Placements: %v", averageNumPlacesNs))
 	println(`====================`)
 }
-func printWorstByTime() {
+func (ap *algoPerformance) printWorstByTime() {
 	println(`==WORST 10 (by duration of solve)==`)
 
 	numWorst := 10
 	worstTimes := make([]int64, 0, numWorst+1)
-	for testTime := range byTime {
+	for testTime := range ap.byTime {
 		shouldAdd := false
 		minI := 0
 		var minVal int64
@@ -133,18 +182,18 @@ func printWorstByTime() {
 			break
 		}
 
-		pi := byTime[key]
+		pi := ap.byTime[key]
 
 		println(fmt.Sprintf("Puzzle #%3v took %9.4fms", pi.puzzleNumber, float64(pi.duration.Nanoseconds())/1000000.0))
 		i++
 	}
 }
-func printWorstByTrials() {
+func (ap *algoPerformance) printWorstByTrials() {
 	println(`==WORST 10 (by number of placements)==`)
 	i := 0
 	numWorst := 10
-	placements := make([]int, 0, len(byNumPlacements))
-	for p := range byNumPlacements {
+	placements := make([]int, 0, len(ap.byNumPlacements))
+	for p := range ap.byNumPlacements {
 		placements = append(placements, p)
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(placements)))
@@ -153,7 +202,7 @@ func printWorstByTrials() {
 			break
 		}
 
-		pi := byNumPlacements[key]
+		pi := ap.byNumPlacements[key]
 
 		println(fmt.Sprintf("Puzzle #%3v took %6v placements", pi.puzzleNumber, pi.numPlacements))
 		i++
