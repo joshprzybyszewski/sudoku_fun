@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"github.com/Workiva/wContent/assert"
 	"testing"
+	
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_BruteForce(t *testing.T) {
