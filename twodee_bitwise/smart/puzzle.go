@@ -1,14 +1,14 @@
 package smart
 
 import (
-	"strconv"
 	"fmt"
+	"strconv"
 
 	"github.com/pkg/errors"
 
+	"../../utils/constants"
 	utils "../../utils/speed"
 	"../../utils/types"
-	"../../utils/constants"
 )
 
 var numPlacements int
@@ -263,11 +263,11 @@ func (p *Puzzle) place(row, col, box int, entry types.Entry) (bool, error) {
 	return true, nil
 }
 
-func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) (error) {
+func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) error {
 	return p.entryIsPresentQuickly(row, col, box, ePresence)
 	//return p.entryIsPresentSlowly(row, col, box, ePresence)
 }
-func (p *Puzzle) entryIsPresentSlowly(row, col, box int, ePresence types.Presence) (error) {
+func (p *Puzzle) entryIsPresentSlowly(row, col, box int, ePresence types.Presence) error {
 	if p.tiles[row][col] != constants.EmptyTile {
 		return errors.New(fmt.Sprintf("Tile already exists at (%v, %v)", row, col))
 	}
@@ -290,8 +290,8 @@ func (p *Puzzle) entryIsPresentSlowly(row, col, box int, ePresence types.Presenc
 
 	return nil
 }
-func (p *Puzzle) entryIsPresentQuickly(row, col, box int, ePresence types.Presence) (error) {
-	if utils.IsPresent(p.rows[row] | p.cols[col] | p.boxs[box], ePresence) {
+func (p *Puzzle) entryIsPresentQuickly(row, col, box int, ePresence types.Presence) error {
+	if utils.IsPresent(p.rows[row]|p.cols[col]|p.boxs[box], ePresence) {
 		return errors.New(`its present`)
 	}
 

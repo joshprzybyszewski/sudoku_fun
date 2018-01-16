@@ -1,11 +1,8 @@
 package types
 
-
-//import "../constants"
-
 const (
 	bestKnownLocationStart = -1
-	sideLen = 9
+	sideLen                = 9
 )
 
 type Entry int
@@ -21,9 +18,9 @@ type Sudoku interface {
 }
 
 type BestKnown struct {
-	loc      int
-	val      uint8
-	lower    uint8
+	loc   int
+	val   uint8
+	lower uint8
 }
 
 func (bk *BestKnown) WillUpdate(loc int, val uint8) bool {
@@ -41,15 +38,15 @@ func (bk *BestKnown) UpdateUnsafe(loc int, val uint8) {
 	bk.val = val
 }
 
-func (bk *BestKnown) IsError() (bool) {
+func (bk *BestKnown) IsError() bool {
 	return bk.loc == bestKnownLocationStart
 }
 
-func (bk *BestKnown) IsStrictlyBetterThan(other *BestKnown) (bool) {
+func (bk *BestKnown) IsStrictlyBetterThan(other *BestKnown) bool {
 	return bk.val < other.val
 }
 
-func (bk *BestKnown) IsBetterThan(other *BestKnown) (bool) {
+func (bk *BestKnown) IsBetterThan(other *BestKnown) bool {
 	return bk.val <= other.val
 }
 
@@ -63,7 +60,7 @@ func (bk *BestKnown) Reset() {
 	bk.lower = 0
 }
 
-func NewBK() (*BestKnown) {
+func NewBK() *BestKnown {
 	bk := &BestKnown{}
 	bk.Reset()
 	return bk

@@ -2,9 +2,9 @@ package naive
 
 import (
 	brute "../../utils"
+	"../../utils/constants"
 	utils "../../utils/slow"
 	"../../utils/types"
-	"../../utils/constants"
 
 	"fmt"
 	"testing"
@@ -116,36 +116,36 @@ func Test_ReadSudoku(t *testing.T) {
 
 	solvedPuzzle := Puzzle{
 		81,
-		[constants.SideLen][constants.SideLen]types.Tile{{3,8,4,1,7,9,6,5,2}, {2,7,6,3,5,8,4,1,9}, {1,5,9,4,6,2,8,7,3}, { 9,6,1,7,8,5,2,3,4}, { 4,2,7,9,1,3,5,6,8}, { 5,3,8,6,2,4,7,9,1}, { 6,9,2,5,4,1,3,8,7}, { 7,4,3,8,9,6,1,2,5}, { 8,1,5,2,3,7,9,4,6}},
-		[constants.SideLen]types.Presence{constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence},
-		[constants.SideLen]types.Presence{constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence},
-		[constants.SideLen]types.Presence{constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence},
+		[constants.SideLen][constants.SideLen]types.Tile{{3, 8, 4, 1, 7, 9, 6, 5, 2}, {2, 7, 6, 3, 5, 8, 4, 1, 9}, {1, 5, 9, 4, 6, 2, 8, 7, 3}, {9, 6, 1, 7, 8, 5, 2, 3, 4}, {4, 2, 7, 9, 1, 3, 5, 6, 8}, {5, 3, 8, 6, 2, 4, 7, 9, 1}, {6, 9, 2, 5, 4, 1, 3, 8, 7}, {7, 4, 3, 8, 9, 6, 1, 2, 5}, {8, 1, 5, 2, 3, 7, 9, 4, 6}},
+		[constants.SideLen]types.Presence{constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence},
+		[constants.SideLen]types.Presence{constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence},
+		[constants.SideLen]types.Presence{constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence},
 	}
 
 	testCases := []struct {
 		msg           string
-		pzlStr           string
-		isError bool
+		pzlStr        string
+		isError       bool
 		expFinalState Puzzle
 	}{{
-		msg: `Empty Puzzle`,
-		pzlStr: constants.EmptyPuzzle,
-		isError: false,
+		msg:           `Empty Puzzle`,
+		pzlStr:        constants.EmptyPuzzle,
+		isError:       false,
 		expFinalState: Puzzle{},
 	}, {
-		msg: `Sparse Puzzle`,
-		pzlStr: `....2...9.6....................................................................56`,
-		isError: false,
+		msg:           `Sparse Puzzle`,
+		pzlStr:        `....2...9.6....................................................................56`,
+		isError:       false,
 		expFinalState: sparsePuzzle,
 	}, {
-		msg: `Solved Puzzle`,
-		pzlStr: `384179652276358419159462873961785234427913568538624791692541387743896125815237946`,
-		isError: false,
+		msg:           `Solved Puzzle`,
+		pzlStr:        `384179652276358419159462873961785234427913568538624791692541387743896125815237946`,
+		isError:       false,
 		expFinalState: solvedPuzzle,
 	}, {
-		msg: `Errored Puzzle`,
-		pzlStr: `11...............................................................................`,
-		isError: true,
+		msg:           `Errored Puzzle`,
+		pzlStr:        `11...............................................................................`,
+		isError:       true,
 		expFinalState: Puzzle{},
 	}}
 
@@ -181,29 +181,29 @@ func Test_clone(t *testing.T) {
 
 func Test_Solve(t *testing.T) {
 	testCases := []struct {
-		msg           string
-		pzlStr        string
-		solutionStr   string
-		startingSize  int
-		firstPlaceR   int
-		firstPlaceC   int
-		firstPlaceEs  []types.Entry
+		msg          string
+		pzlStr       string
+		solutionStr  string
+		startingSize int
+		firstPlaceR  int
+		firstPlaceC  int
+		firstPlaceEs []types.Entry
 	}{{
-		msg:           `First Puzzle`,
-		pzlStr:        `..812...9.6.........2..95......8.93....2..68...........564..3....9...41..8..1..56`,
-		solutionStr:   `348125769965347821712869543621784935573291684894536172156472398239658417487913256`,
-		startingSize:  25,
-		firstPlaceR:   0,
-		firstPlaceC:   0,
-		firstPlaceEs:  []types.Entry{3,4,5,7},
+		msg:          `First Puzzle`,
+		pzlStr:       `..812...9.6.........2..95......8.93....2..68...........564..3....9...41..8..1..56`,
+		solutionStr:  `348125769965347821712869543621784935573291684894536172156472398239658417487913256`,
+		startingSize: 25,
+		firstPlaceR:  0,
+		firstPlaceC:  0,
+		firstPlaceEs: []types.Entry{3, 4, 5, 7},
 	}, {
-		msg:           `Second Puzzle`,
-		pzlStr:        `...21.83.3.1..5....82.7...54....2..9.78.....4.......1.71...........5.3.1...8..9..`,
-		solutionStr:   `957214836341685297682379145435162789178593624296748513713926458829457361564831972`,
-		startingSize:  25,
-		firstPlaceR:   0,
-		firstPlaceC:   0,
-		firstPlaceEs:  []types.Entry{5, 6, 9},
+		msg:          `Second Puzzle`,
+		pzlStr:       `...21.83.3.1..5....82.7...54....2..9.78.....4.......1.71...........5.3.1...8..9..`,
+		solutionStr:  `957214836341685297682379145435162789178593624296748513713926458829457361564831972`,
+		startingSize: 25,
+		firstPlaceR:  0,
+		firstPlaceC:  0,
+		firstPlaceEs: []types.Entry{5, 6, 9},
 	}}
 
 	for _, tc := range testCases {
@@ -229,7 +229,7 @@ func Test_Solve(t *testing.T) {
 		solution, err := pzl.Solve()
 		require.NoError(t, err, failMsg)
 		require.NotNil(t, solution, failMsg)
-		assert.True(t, pzl.GetNumPlacements() >= 81 - tc.startingSize, failMsg)
+		assert.True(t, pzl.GetNumPlacements() >= 81-tc.startingSize, failMsg)
 
 		wasSolved := brute.BruteForceCheck(solution.GetSimple())
 		assert.True(t, wasSolved, failMsg)

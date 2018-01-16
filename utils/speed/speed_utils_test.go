@@ -434,15 +434,15 @@ func Test_isPresent(t *testing.T) {
 		expVal:    true,
 	}, {
 		ePresence: PresenceOf(3),
-		presence:  (1<<3) | (1<<4),
+		presence:  (1 << 3) | (1 << 4),
 		expVal:    false,
 	}, {
 		ePresence: PresenceOf(2),
-		presence:  (1<<0) | (1<<1) | (1<<3) | (1<<4) | (1<<7),
+		presence:  (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 7),
 		expVal:    true,
 	}, {
 		ePresence: PresenceOf(3),
-		presence:  (1<<0) | (1<<1) | (1<<3) | (1<<4) | (1<<7),
+		presence:  (1 << 0) | (1 << 1) | (1 << 3) | (1 << 4) | (1 << 7),
 		expVal:    false,
 	}}
 

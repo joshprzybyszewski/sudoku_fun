@@ -21,14 +21,14 @@ var (
 	byPuzzleNumber  = map[int]puzzleInfo{}
 )
 
-type puzzleInfo struct  {
-	duration *time.Duration
+type puzzleInfo struct {
+	duration      *time.Duration
 	numPlacements int
-	solutionStr string
-	puzzleNumber int
+	solutionStr   string
+	puzzleNumber  int
 }
 
-type puzzleSolver func (singleLinePzl string) (executionTime *time.Duration, numPlacements int, solutionString string)
+type puzzleSolver func(singleLinePzl string) (executionTime *time.Duration, numPlacements int, solutionString string)
 
 func aaaaaahhhhhhh(err error) {
 	if err != nil {
@@ -48,7 +48,7 @@ func runTestForAllPuzzles(slvr puzzleSolver) {
 
 	bfp := bufio.NewReader(fp)
 
-	for i := 1;; i++ {
+	for i := 1; ; i++ {
 		line, _, err := bfp.ReadLine()
 		if err == io.EOF {
 			break
@@ -71,7 +71,7 @@ func runTestForAllPuzzles(slvr puzzleSolver) {
 func printEveryPuzzle() {
 	for i, pzl := range byPuzzleNumber {
 		actuallySolved := utils.BruteForceCheck(pzl.solutionStr)
-		println(fmt.Sprintf("Solved (%v) Puzzle #%v in \t%9.4fms with \t%6v tries", actuallySolved, i, float64(pzl.duration.Nanoseconds()) / 1000000.0, pzl.numPlacements))
+		println(fmt.Sprintf("Solved (%v) Puzzle #%v in \t%9.4fms with \t%6v tries", actuallySolved, i, float64(pzl.duration.Nanoseconds())/1000000.0, pzl.numPlacements))
 	}
 
 }
@@ -89,7 +89,7 @@ func printAverages() {
 
 	println(`======AVERAGES======`)
 	println(fmt.Sprintf("Total # tests:        %v", total))
-	println(fmt.Sprintf("Average duration:  %9.4fms", float64(averageDurationNs) / 1000000.0))
+	println(fmt.Sprintf("Average duration:  %9.4fms", float64(averageDurationNs)/1000000.0))
 	println(fmt.Sprintf("Average # Placements: %v", averageNumPlacesNs))
 	println(`====================`)
 }
@@ -97,7 +97,7 @@ func printWorstByTime() {
 	println(`==WORST 10 (by duration of solve)==`)
 
 	numWorst := 10
-	worstTimes := make([]int64, 0, numWorst + 1)
+	worstTimes := make([]int64, 0, numWorst+1)
 	for testTime := range byTime {
 		shouldAdd := false
 		minI := 0
@@ -135,7 +135,7 @@ func printWorstByTime() {
 
 		pi := byTime[key]
 
-		println(fmt.Sprintf("Puzzle #%3v took %9.4fms", pi.puzzleNumber, float64(pi.duration.Nanoseconds()) / 1000000.0))
+		println(fmt.Sprintf("Puzzle #%3v took %9.4fms", pi.puzzleNumber, float64(pi.duration.Nanoseconds())/1000000.0))
 		i++
 	}
 }

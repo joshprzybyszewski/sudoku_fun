@@ -1,14 +1,14 @@
 package robust
 
 import (
-	"strconv"
 	"fmt"
+	"strconv"
 
 	"github.com/pkg/errors"
 
+	"../../utils/constants"
 	utils "../../utils/slow"
 	"../../utils/types"
-	"../../utils/constants"
 )
 
 var numPlacements int
@@ -267,7 +267,7 @@ func (p *Puzzle) place(row, col, box int, entry types.Entry) (bool, error) {
 	return true, nil
 }
 
-func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) (error) {
+func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) error {
 	if p.tiles[row][col] != constants.EmptyTile {
 		return errors.New(fmt.Sprintf("Tile already exists at (%v, %v)", row, col))
 	}

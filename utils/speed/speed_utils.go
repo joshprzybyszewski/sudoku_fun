@@ -81,7 +81,7 @@ func PresenceOf(entry types.Entry) types.Presence {
 	return presenceOfSpeed(entry)
 }
 func presenceOfSpeed(entry types.Entry) types.Presence {
-		return types.Presence(1 << uint(entry-1))
+	return types.Presence(1 << uint(entry-1))
 }
 
 func IsPresent(existing, entryPresence types.Presence) bool {

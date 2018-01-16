@@ -8,8 +8,8 @@ import (
 
 	//"../../utils"
 	"../../utils/constants"
-	"../../utils/types"
 	utils "../../utils/slow"
+	"../../utils/types"
 )
 
 var numPlacements int

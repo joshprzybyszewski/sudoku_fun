@@ -8,10 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 
 	brute "../../utils"
+	"../../utils/constants"
 	utils "../../utils/speed"
 	"../../utils/types"
-	"../../utils/constants"
-
 )
 
 func Test_place(t *testing.T) {
@@ -37,7 +36,7 @@ func Test_place(t *testing.T) {
 		msg           string
 		row           int
 		col           int
-		box int
+		box           int
 		entry         types.Entry
 		pzzl          Puzzle
 		isError       bool
@@ -47,7 +46,7 @@ func Test_place(t *testing.T) {
 		msg:           `On a tile that has been placed`,
 		row:           0,
 		col:           0,
-		box: 0,
+		box:           0,
 		entry:         5,
 		pzzl:          pzl1,
 		isError:       true,
@@ -56,7 +55,7 @@ func Test_place(t *testing.T) {
 		msg:           `On a row that contains that entry`,
 		row:           3,
 		col:           0,
-		box: 3,
+		box:           3,
 		entry:         5,
 		pzzl:          pzl1,
 		isError:       true,
@@ -65,7 +64,7 @@ func Test_place(t *testing.T) {
 		msg:           `On a col that contains that entry`,
 		row:           0,
 		col:           3,
-		box: 1,
+		box:           1,
 		entry:         5,
 		pzzl:          pzl1,
 		isError:       true,
@@ -74,7 +73,7 @@ func Test_place(t *testing.T) {
 		msg:           `In a box that contains that entry`,
 		row:           7,
 		col:           7,
-		box: 8,
+		box:           8,
 		entry:         5,
 		pzzl:          pzl1,
 		isError:       true,
@@ -83,7 +82,7 @@ func Test_place(t *testing.T) {
 		msg:           `In a fine location`,
 		row:           6,
 		col:           6,
-		box: 8,
+		box:           8,
 		entry:         3,
 		pzzl:          pzl2s,
 		isError:       false,
@@ -109,9 +108,9 @@ func Test_place(t *testing.T) {
 
 func Test_ReadSudoku(t *testing.T) {
 	emptyPuzzle := Puzzle{}
-	emptyPuzzle.numFreeInRow = [constants.SideLen]uint8{9,9,9,9,9,9,9,9,9}
-	emptyPuzzle.numFreeInCol = [constants.SideLen]uint8{9,9,9,9,9,9,9,9,9}
-	emptyPuzzle.numFreeInBox = [constants.SideLen]uint8{9,9,9,9,9,9,9,9,9}
+	emptyPuzzle.numFreeInRow = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
+	emptyPuzzle.numFreeInCol = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
+	emptyPuzzle.numFreeInBox = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
 
 	sparsePuzzle := Puzzle{}
 	sparsePuzzle.numPlaced = 5
@@ -131,45 +130,45 @@ func Test_ReadSudoku(t *testing.T) {
 	sparsePuzzle.boxs[1] = utils.PresenceOf(2)
 	sparsePuzzle.boxs[2] = utils.PresenceOf(9)
 	sparsePuzzle.boxs[8] = utils.PresenceOf(5) | utils.PresenceOf(6)
-	sparsePuzzle.numFreeInRow = [constants.SideLen]uint8{7,8,9,9,9,9,9,9,7}
-	sparsePuzzle.numFreeInCol = [constants.SideLen]uint8{9,8,9,9,8,9,9,8,7}
-	sparsePuzzle.numFreeInBox = [constants.SideLen]uint8{8,8,8,9,9,9,9,9,7}
+	sparsePuzzle.numFreeInRow = [constants.SideLen]uint8{7, 8, 9, 9, 9, 9, 9, 9, 7}
+	sparsePuzzle.numFreeInCol = [constants.SideLen]uint8{9, 8, 9, 9, 8, 9, 9, 8, 7}
+	sparsePuzzle.numFreeInBox = [constants.SideLen]uint8{8, 8, 8, 9, 9, 9, 9, 9, 7}
 
 	solvedPuzzle := Puzzle{
 		81,
-		[constants.SideLen][constants.SideLen]types.Tile{{3,8,4,1,7,9,6,5,2}, {2,7,6,3,5,8,4,1,9}, {1,5,9,4,6,2,8,7,3}, { 9,6,1,7,8,5,2,3,4}, { 4,2,7,9,1,3,5,6,8}, { 5,3,8,6,2,4,7,9,1}, { 6,9,2,5,4,1,3,8,7}, { 7,4,3,8,9,6,1,2,5}, { 8,1,5,2,3,7,9,4,6}},
-		[constants.SideLen]types.Presence{constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence},
-		[constants.SideLen]types.Presence{constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence},
-		[constants.SideLen]types.Presence{constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence,constants.FullPresence},
-		[constants.SideLen]uint8{0,0,0,0,0,0,0,0,0},
-		[constants.SideLen]uint8{0,0,0,0,0,0,0,0,0},
-		[constants.SideLen]uint8{0,0,0,0,0,0,0,0,0},
+		[constants.SideLen][constants.SideLen]types.Tile{{3, 8, 4, 1, 7, 9, 6, 5, 2}, {2, 7, 6, 3, 5, 8, 4, 1, 9}, {1, 5, 9, 4, 6, 2, 8, 7, 3}, {9, 6, 1, 7, 8, 5, 2, 3, 4}, {4, 2, 7, 9, 1, 3, 5, 6, 8}, {5, 3, 8, 6, 2, 4, 7, 9, 1}, {6, 9, 2, 5, 4, 1, 3, 8, 7}, {7, 4, 3, 8, 9, 6, 1, 2, 5}, {8, 1, 5, 2, 3, 7, 9, 4, 6}},
+		[constants.SideLen]types.Presence{constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence},
+		[constants.SideLen]types.Presence{constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence},
+		[constants.SideLen]types.Presence{constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence, constants.FullPresence},
+		[constants.SideLen]uint8{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		[constants.SideLen]uint8{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		[constants.SideLen]uint8{0, 0, 0, 0, 0, 0, 0, 0, 0},
 	}
 
 	testCases := []struct {
 		msg           string
-		pzlStr           string
-		isError bool
+		pzlStr        string
+		isError       bool
 		expFinalState Puzzle
 	}{{
-		msg: `Empty Puzzle`,
-		pzlStr: constants.EmptyPuzzle,
-		isError: false,
+		msg:           `Empty Puzzle`,
+		pzlStr:        constants.EmptyPuzzle,
+		isError:       false,
 		expFinalState: emptyPuzzle,
 	}, {
-		msg: `Sparse Puzzle`,
-		pzlStr: `....2...9.6....................................................................56`,
-		isError: false,
+		msg:           `Sparse Puzzle`,
+		pzlStr:        `....2...9.6....................................................................56`,
+		isError:       false,
 		expFinalState: sparsePuzzle,
 	}, {
-		msg: `Solved Puzzle`,
-		pzlStr: `384179652276358419159462873961785234427913568538624791692541387743896125815237946`,
-		isError: false,
+		msg:           `Solved Puzzle`,
+		pzlStr:        `384179652276358419159462873961785234427913568538624791692541387743896125815237946`,
+		isError:       false,
 		expFinalState: solvedPuzzle,
 	}, {
-		msg: `Errored Puzzle`,
-		pzlStr: `11...............................................................................`,
-		isError: true,
+		msg:           `Errored Puzzle`,
+		pzlStr:        `11...............................................................................`,
+		isError:       true,
 		expFinalState: Puzzle{},
 	}}
 
@@ -267,7 +266,7 @@ func Test_Solve(t *testing.T) {
 		solution, err := pzl.Solve()
 		require.NoError(t, err, failMsg)
 		require.NotNil(t, solution, failMsg)
-		assert.True(t, pzl.GetNumPlacements() >= 81 - tc.startingSize, failMsg)
+		assert.True(t, pzl.GetNumPlacements() >= 81-tc.startingSize, failMsg)
 
 		wasSolved := brute.BruteForceCheck(solution.GetSimple())
 		assert.True(t, wasSolved, failMsg)
