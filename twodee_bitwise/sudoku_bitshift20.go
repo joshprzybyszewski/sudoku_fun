@@ -4,16 +4,15 @@ import (
 	"fmt"
 	"time"
 
-	//"./naive"
-	"./smart"
-	//"./robust"
 	"../utils"
 	"../utils/constants"
 	"../utils/types"
 )
 
-func PuzzleSolver(sudokuPuzzle string) (*time.Duration, int, string) {
-	puzzle, err := readSudoku(sudokuPuzzle)
+type SudokuReader func(str string) (p types.Sudoku, err error)
+
+func PuzzleSolver(readPuzzle SudokuReader, sudokuPuzzle string) (*time.Duration, int, string) {
+	puzzle, err := readPuzzle(sudokuPuzzle)
 	if err != nil {
 		println(`BAD SUDOKU!!`)
 		return nil, 0, ``
@@ -35,13 +34,4 @@ func PuzzleSolver(sudokuPuzzle string) (*time.Duration, int, string) {
 	}
 
 	return &duration, solution.GetNumPlacements(), solution.GetSimple()
-}
-
-func readSudoku(entries string) (s types.Sudoku, err error) {
-	pzl, err := smart.ReadSudoku(entries)
-	if err != nil {
-		return nil, err
-	}
-
-	return types.Sudoku(pzl), nil
 }
