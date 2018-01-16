@@ -46,13 +46,14 @@ func ReadSudoku(str string) (p Puzzle, err error) {
 	pzl := newPuzzle()
 	for i := 0; i < len(str); i++ {
 		entryChar := string(str[i])
-		entry, err := strconv.Atoi(entryChar)
-		if err != nil {
-			return Puzzle{}, err
-		}
 
 		if entryChar == constants.EmptyTileChar {
 			continue
+		}
+
+		entry, err := strconv.Atoi(entryChar)
+		if err != nil {
+			return Puzzle{}, err
 		}
 
 		row := i / constants.SideLen
@@ -140,7 +141,7 @@ func (p *Puzzle) getLocationAndEntries() (row, col, box int, entries []types.Ent
 
 	entries, err = p.getEntries(row, col, box)
 	if err != nil {
-		return -1, -1, -1, nil, errors.New(fmt.Sprintf("Erroed on looking for entries for location (%v, %v): %v", row, col, box))
+		return -1, -1, -1, nil, errors.New(fmt.Sprintf("Errored on looking for entries for location (%v, %v): %v", row, col, box))
 	}
 
 	if len(entries) == 0 {
@@ -290,7 +291,6 @@ func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) (er
 	return nil
 }
 
-/// Solves in 9.4802ms on average, with 4,585 average tries
 func (p *Puzzle) solve() (solution *Puzzle, err error) {
 	row, col, box, entries, err := p.getLocationAndEntries()
 	if err != nil {
@@ -301,7 +301,6 @@ func (p *Puzzle) solve() (solution *Puzzle, err error) {
 	for _, entry := range entries {
 		pClone := p.clone()
 
-		//addasdf.PrintPlacement(entry, row, col)
 		wasPlaced, err := pClone.place(row, col, box, entry)
 		if err != nil {
 			utils.PrintError(`failed to place`, err)
@@ -315,8 +314,7 @@ func (p *Puzzle) solve() (solution *Puzzle, err error) {
 
 			cloneSolution, err := pClone.solve()
 			if err != nil {
-				utils.PrintError(`failed to solve`, err)
-				return nil, err
+				continue
 			}
 
 			if cloneSolution != nil {

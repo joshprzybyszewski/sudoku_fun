@@ -309,7 +309,6 @@ func (p *Puzzle) solve() (solution *Puzzle, err error) {
 	for _, entry := range entries {
 		pClone := p.clone()
 
-		//addasdf.PrintPlacement(entry, row, col)
 		wasPlaced, _ := pClone.place(row, col, box, entry)
 
 		if wasPlaced {

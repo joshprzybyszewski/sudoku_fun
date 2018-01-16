@@ -1,5 +1,8 @@
 package types
 
+
+//import "../constants"
+
 const (
 	bestKnownLocationStart = -1
 	sideLen = 9

@@ -248,9 +248,6 @@ func Test_Solve(t *testing.T) {
 		assert.Equal(t, tc.startingSize, pzl.GetNumPlacements(), failMsg)
 		assert.Equal(t, tc.pzlStr, pzl.GetSimple(), failMsg)
 
-		pzl.PrintPretty()
-		pzl.PrintSimple()
-
 		emptyR, emptyC, emptyB, err := pzl.getEmptyTile()
 		require.NoError(t, err, failMsg)
 		assert.Equal(t, tc.firstPlaceR, emptyR, failMsg)
