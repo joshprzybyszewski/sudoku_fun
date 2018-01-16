@@ -1,13 +1,9 @@
 package types
 
-
-//import "../constants"
-
 const (
 	bestKnownLocationStart = -1
 	sideLen = 9
 )
-
 
 type Entry int
 type Tile uint8
