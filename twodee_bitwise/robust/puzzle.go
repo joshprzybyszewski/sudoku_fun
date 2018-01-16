@@ -11,8 +11,6 @@ import (
 	"../../utils/constants"
 )
 
-//TODO make this file robust
-
 var numPlacements int
 
 type Puzzle struct {
@@ -49,15 +47,22 @@ func ReadSudoku(str string) (p Puzzle, err error) {
 	for i := 0; i < len(str); i++ {
 		entryChar := string(str[i])
 		entry, err := strconv.Atoi(entryChar)
+		if err != nil {
+			return Puzzle{}, err
+		}
 
-		if entryChar == constants.EmptyTileChar || err != nil {
+		if entryChar == constants.EmptyTileChar {
 			continue
 		}
 
 		row := i / constants.SideLen
 		col := i % constants.SideLen
 		box, err := utils.GetBox(row, col)
-		if wasPlaced, err := pzl.place(row, col, box, types.Entry(entry)); err != nil || !wasPlaced {
+		wasPlaced, err := pzl.place(row, col, box, types.Entry(entry))
+		if err != nil {
+			return Puzzle{}, err
+		}
+		if !wasPlaced {
 			return Puzzle{}, errors.New(`BAD sudoku!!!`)
 		}
 	}
@@ -128,42 +133,36 @@ func (p *Puzzle) clone() *Puzzle {
 }
 
 func (p *Puzzle) getLocationAndEntries() (row, col, box int, entries []types.Entry, err error) {
-	row, col, box, _ = p.getEmptyTile()
-	//if err != nil {
-	//	return -1, -1, -1, nil, errors.New(`no empty tile found`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
-	//}
+	row, col, box, err = p.getEmptyTile()
+	if err != nil {
+		return -1, -1, -1, nil, errors.New(fmt.Sprintf("There are no empty tiles!"))
+	}
 
 	entries, err = p.getEntries(row, col, box)
 	if err != nil {
-		//p.PrintPretty()
-		return -1, -1, -1, nil, errors.New(`no entries possible`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
+		return -1, -1, -1, nil, errors.New(fmt.Sprintf("Erroed on looking for entries for location (%v, %v): %v", row, col, box))
+	}
+
+	if len(entries) == 0 {
+		return -1, -1, -1, nil, errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v): %v", row, col, box))
 	}
 
 	return row, col, box, entries, nil
 }
 
 func (p *Puzzle) getEntries(row, col, box int) ([]types.Entry, error) {
-	return p.slowlyGetEntries(row, col, box)
-}
-func (p *Puzzle) slowlyGetEntries(row, col, box int) ([]types.Entry, error) {
-	entries := constants.AllEntries
-	entries = utils.GetPossibleEntries(entries, p.rows[row])
+	entries := utils.GetPossibleEntries(constants.AllEntries, p.rows[row])
 	entries = utils.GetPossibleEntries(entries, p.cols[col])
 	entries = utils.GetPossibleEntries(entries, p.boxs[box])
 
 	if len(entries) == 0 {
-		//p.PrintPretty()
-		return nil, errors.New(`no entries possible`) //errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
+		return nil, errors.New(fmt.Sprintf("There are no possible entries for location (%v, %v)", row, col))
 	}
 
 	return entries, nil
 }
 
 func (p *Puzzle) getEmptyTile() (row, col, box int, err error) {
-	return p.getBestLocationSmartly()
-}
-
-func (p *Puzzle) getBestLocationSmartly() (row, col, box int, err error) {
 	bkRow := types.NewBK()
 	bkCol := types.NewBK()
 	bkBox := types.NewBK()
@@ -173,14 +172,27 @@ func (p *Puzzle) getBestLocationSmartly() (row, col, box int, err error) {
 		bkCol.Update(i, p.numFreeInCol[i])
 	}
 
-	if bkRow.IsError() || bkCol.IsError() {
-		return -1, -1, -1, errors.New(`All the rows or cols are full!`)
+	if bkRow.IsError() {
+		return -1, -1, -1, errors.New(`All the rows are full!`)
+	}
+	if bkCol.IsError() {
+		return -1, -1, -1, errors.New(`All the cols are full!`)
 	}
 
 	if bkRow.IsBetterThan(bkCol) {
 		p.getBestCol(bkRow.Location(), bkCol, bkBox)
 	} else {
 		p.getBestRow(bkCol.Location(), bkRow, bkBox)
+	}
+
+	if bkRow.IsError() {
+		return -1, -1, -1, errors.New(`Couldn't find best known row'!`)
+	}
+	if bkCol.IsError() {
+		return -1, -1, -1, errors.New(`Couldn't find best known col'!`)
+	}
+	if bkBox.IsError() {
+		return -1, -1, -1, errors.New(`Couldn't find best known box'!`)
 	}
 
 	return bkRow.Location(), bkCol.Location(), bkBox.Location(), nil
@@ -255,10 +267,6 @@ func (p *Puzzle) place(row, col, box int, entry types.Entry) (bool, error) {
 }
 
 func (p *Puzzle) entryIsPresent(row, col, box int, ePresence types.Presence) (error) {
-	return p.entryIsPresentQuickly(row, col, box, ePresence)
-	//return p.entryIsPresentSlowly(row, col, box, ePresence)
-}
-func (p *Puzzle) entryIsPresentSlowly(row, col, box int, ePresence types.Presence) (error) {
 	if p.tiles[row][col] != constants.EmptyTile {
 		return errors.New(fmt.Sprintf("Tile already exists at (%v, %v)", row, col))
 	}
@@ -281,13 +289,6 @@ func (p *Puzzle) entryIsPresentSlowly(row, col, box int, ePresence types.Presenc
 
 	return nil
 }
-func (p *Puzzle) entryIsPresentQuickly(row, col, box int, ePresence types.Presence) (error) {
-	if utils.IsPresent(p.rows[row] | p.cols[col] | p.boxs[box], ePresence) {
-		return errors.New(`its present`)
-	}
-
-	return nil
-}
 
 /// Solves in 9.4802ms on average, with 4,585 average tries
 func (p *Puzzle) solve() (solution *Puzzle, err error) {
@@ -301,14 +302,22 @@ func (p *Puzzle) solve() (solution *Puzzle, err error) {
 		pClone := p.clone()
 
 		//addasdf.PrintPlacement(entry, row, col)
-		wasPlaced, _ := pClone.place(row, col, box, entry)
+		wasPlaced, err := pClone.place(row, col, box, entry)
+		if err != nil {
+			utils.PrintError(`failed to place`, err)
+			return nil, err
+		}
 
 		if wasPlaced {
 			if pClone.numPlaced == constants.NumTiles {
 				return pClone, nil
 			}
 
-			cloneSolution, _ := pClone.solve()
+			cloneSolution, err := pClone.solve()
+			if err != nil {
+				utils.PrintError(`failed to solve`, err)
+				return nil, err
+			}
 
 			if cloneSolution != nil {
 				return cloneSolution, nil
