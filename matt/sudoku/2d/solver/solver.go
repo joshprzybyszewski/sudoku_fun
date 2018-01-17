@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Workiva/sudoku/2d/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/utils"
 )
 
 var (
