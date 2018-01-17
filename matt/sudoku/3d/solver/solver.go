@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/Workiva/sudoku/3d/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/3d/utils"
 )
 
 func main() {
