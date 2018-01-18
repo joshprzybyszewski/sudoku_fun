@@ -16,17 +16,17 @@ import (
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/smart"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/verysmart"
 	"github.com/joshprzybyszewski/sudoku_fun/utils"
-	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/speed"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 var (
 	filePath = flag.String(`sudokuInput`, `example-puzzles/puzzles.sk`, `path of file containing puzzles`)
 
-	naivePerfomance  = &algoPerformance{naiveRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
-	smartPerfomance  = &algoPerformance{smartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
-	verysmartPerfomance  = &algoPerformance{verysmartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
-	robustPerfomance = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	naivePerfomance     = &algoPerformance{naiveRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	smartPerfomance     = &algoPerformance{smartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	verysmartPerfomance = &algoPerformance{verysmartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	robustPerfomance    = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 )
 
 func naiveRead(entries string) (s types.Sudoku, err error) {

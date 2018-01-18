@@ -21,7 +21,7 @@ func getLocationAndEntriesVerySmart(p *common.SmartPuzzle) (row, col, box int, e
 			}
 
 			b, _ := speedUtils.GetBox(r, c)
-			freeSpots, entries := speedUtils.GetCachedNumFreeAndPosEntries(p.Rows[r]|p.Cols[c]|p.Boxs[b])
+			freeSpots, entries := speedUtils.GetCachedNumFreeAndPosEntries(p.Rows[r] | p.Cols[c] | p.Boxs[b])
 
 			if freeSpots == 0 {
 				return -1, -1, -1, nil, errors.New(`there are no possible entries here!`)

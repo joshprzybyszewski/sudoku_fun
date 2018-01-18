@@ -31,11 +31,11 @@ var (
 	}
 
 	presenceToNumFree [constants.FullPresence + 1]numFreeAndPossibleEntries
-	inited = false
+	inited            = false
 )
 
-type numFreeAndPossibleEntries struct{
-	numFree uint8
+type numFreeAndPossibleEntries struct {
+	numFree         uint8
 	possibleEntries []types.Entry
 }
 

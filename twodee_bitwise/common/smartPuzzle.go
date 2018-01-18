@@ -1,21 +1,21 @@
 package common
 
 import (
-	"strconv"
 	"errors"
+	"strconv"
 
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
-	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 	speedUtils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 var numAttempts int
 
-type SolverFn func (*SmartPuzzle) (solution *SmartPuzzle, err error)
+type SolverFn func(*SmartPuzzle) (solution *SmartPuzzle, err error)
 
 type SmartPuzzle struct {
-	NumPlaced   int
-	solver      SolverFn
+	NumPlaced int
+	solver    SolverFn
 
 	Tiles [constants.SideLen][constants.SideLen]types.Tile /* [row][col] */
 
@@ -125,7 +125,6 @@ func (p *SmartPuzzle) entryIsPresent(row, col, box int, ePresence types.Presence
 
 	return nil
 }
-
 
 func (p *SmartPuzzle) Place(row, col, box int, entry types.Entry) (bool, error) {
 	numAttempts++
