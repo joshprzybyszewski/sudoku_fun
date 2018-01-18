@@ -29,7 +29,33 @@ var (
 		eightPresence,
 		ninePresence,
 	}
+
+	presenceToNumFree [constants.FullPresence + 1]numFreeAndPossibleEntries
+	inited            = false
 )
+
+type numFreeAndPossibleEntries struct {
+	numFree         uint8
+	possibleEntries []types.Entry
+}
+
+func InitUtils() {
+	if inited {
+		return
+	}
+	for p := types.Presence(0); p <= constants.FullPresence; p++ {
+		presenceToNumFree[p] = numFreeAndPossibleEntries{
+			uint8(GetNumFreeSpots(p)),
+			GetPossibleEntriesQuickly(p, constants.EmptyPresence, constants.EmptyPresence),
+		}
+	}
+	inited = true
+}
+
+func GetCachedNumFreeAndPosEntries(presence types.Presence) (int, []types.Entry) {
+	value := presenceToNumFree[presence]
+	return int(value.numFree), value.possibleEntries
+}
 
 func GetPossibleEntries(entries []types.Entry, presence types.Presence) []types.Entry {
 	posEntries := make([]types.Entry, 0, constants.SideLen)
@@ -78,9 +104,6 @@ func GetPossibleEntriesQuickly(rowP, colP, boxP types.Presence) []types.Entry {
 }
 
 func PresenceOf(entry types.Entry) types.Presence {
-	return presenceOfSpeed(entry)
-}
-func presenceOfSpeed(entry types.Entry) types.Presence {
 	return types.Presence(1 << uint(entry-1))
 }
 
@@ -89,9 +112,6 @@ func IsPresent(existing, entryPresence types.Presence) bool {
 }
 
 func GetBox(row, col int) (int, error) {
-	return getBoxSpeed(row, col)
-}
-func getBoxSpeed(row, col int) (int, error) {
 	return ((row / constants.Root) * constants.Root) + (col / constants.Root), nil
 }
 
@@ -99,7 +119,7 @@ func GetNumFreeSpots(presence types.Presence) int {
 	numFree := 0
 
 	for _, ePresence := range allEntriesPresence {
-		if IsPresent(presence, ePresence) {
+		if !IsPresent(presence, ePresence) {
 			numFree++
 		}
 	}
