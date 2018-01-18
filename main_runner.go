@@ -141,10 +141,16 @@ func (ap *algoPerformance) printEveryPuzzle() {
 		actuallySolved := utils.BruteForceCheck(pzl.solutionStr)
 		println(fmt.Sprintf("Solved (%v) Puzzle #%v in \t%9.4fms with \t%6v tries", actuallySolved, i, float64(pzl.duration.Nanoseconds())/1000000.0, pzl.numPlacements))
 	}
-
 }
 func durToStr(nanoseconds int64) string {
-	return fmt.Sprintf("%9.4fmicroseconds", float64(nanoseconds)/1000.0)
+	if nanoseconds > 1000000000 {
+		return fmt.Sprintf("%9.4f seconds", float64(nanoseconds)/1000000000.0)
+	} else if nanoseconds > 1000000 {
+		return fmt.Sprintf("%9.4fms", float64(nanoseconds)/1000000.0)
+	} else if nanoseconds > 1000 {
+		return fmt.Sprintf("%9.4fμs", float64(nanoseconds)/1000.0)
+	}
+	return fmt.Sprintf("%9.4fns", float64(nanoseconds))
 }
 func (ap *algoPerformance) printAverages() {
 	total := 0

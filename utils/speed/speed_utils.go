@@ -53,9 +53,6 @@ func InitUtils() {
 }
 
 func GetCachedNumFreeAndPosEntries(presence types.Presence) (int, []types.Entry) {
-	if !inited {
-		InitUtils()
-	}
 	value := presenceToNumFree[presence]
 	return int(value.numFree), value.possibleEntries
 }
@@ -107,9 +104,6 @@ func GetPossibleEntriesQuickly(rowP, colP, boxP types.Presence) []types.Entry {
 }
 
 func PresenceOf(entry types.Entry) types.Presence {
-	return presenceOfSpeed(entry)
-}
-func presenceOfSpeed(entry types.Entry) types.Presence {
 	return types.Presence(1 << uint(entry-1))
 }
 
@@ -118,9 +112,6 @@ func IsPresent(existing, entryPresence types.Presence) bool {
 }
 
 func GetBox(row, col int) (int, error) {
-	return getBoxSpeed(row, col)
-}
-func getBoxSpeed(row, col int) (int, error) {
 	return ((row / constants.Root) * constants.Root) + (col / constants.Root), nil
 }
 
