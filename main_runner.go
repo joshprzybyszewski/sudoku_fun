@@ -9,11 +9,11 @@ import (
 	"sort"
 	"time"
 
+	matt "github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/solver"
 	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/naive"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/robust"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/smart"
-	matt "github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/solver"
 	"github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
@@ -51,13 +51,8 @@ func robustRead(entries string) (s types.Sudoku, err error) {
 
 	return types.Sudoku(pzl), nil
 }
-func mattRead(entries string) (s types.Sudoku, err error) {
-	pzl, err := matt.ReadSudoku(entries)
-	if err != nil {
-		return nil, err
-	}
-
-	return types.Sudoku(pzl), nil
+func mattRead(_ string) (s types.Sudoku, err error) {
+	return nil, nil
 }
 
 type algoPerformance struct {
