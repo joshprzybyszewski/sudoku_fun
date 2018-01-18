@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func Test_BruteForce(t *testing.T) {

@@ -1,8 +1,8 @@
 package speed
 
 import (
-	"../constants"
-	"../types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 const (

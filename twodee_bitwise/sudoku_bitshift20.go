@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"../utils"
-	"../utils/constants"
-	"../utils/types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 type SudokuReader func(str string) (p types.Sudoku, err error)

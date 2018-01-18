@@ -9,13 +9,13 @@ import (
 	"sort"
 	"time"
 
-	twodee "./twodee_bitwise"
-	"./twodee_bitwise/naive"
-	"./twodee_bitwise/robust"
-	"./twodee_bitwise/smart"
-	matt "./matt/sudoku/2d/solver"
-	"./utils"
-	"./utils/types"
+	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/naive"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/robust"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/smart"
+	matt "github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/solver"
+	"github.com/joshprzybyszewski/sudoku_fun/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 var (

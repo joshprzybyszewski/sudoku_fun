@@ -3,7 +3,7 @@ package utils
 import (
 	"strconv"
 
-	"./constants"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 )
 
 func BruteForceCheck(sudokuStr string) bool {

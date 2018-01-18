@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"../constants"
-	"../types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 func Test_presenceOf(t *testing.T) {

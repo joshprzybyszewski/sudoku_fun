@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	brute "../../utils"
-	"../../utils/constants"
-	utils "../../utils/speed"
-	"../../utils/types"
+	brute "github.com/joshprzybyszewski/sudoku_fun/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	utils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 func Test_place(t *testing.T) {

@@ -1,6 +1,8 @@
 package constants
 
-import "../types"
+import (
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
+)
 
 const (
 	Root     = 3
