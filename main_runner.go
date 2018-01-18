@@ -10,11 +10,14 @@ import (
 	"time"
 
 	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
+	twodee_common "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/common"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/naive"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/robust"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/smart"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/verysmart"
 	"github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/speed"
 )
 
 var (
@@ -22,6 +25,7 @@ var (
 
 	naivePerfomance  = &algoPerformance{naiveRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	smartPerfomance  = &algoPerformance{smartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	verysmartPerfomance  = &algoPerformance{verysmartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	robustPerfomance = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 )
 
@@ -34,13 +38,22 @@ func naiveRead(entries string) (s types.Sudoku, err error) {
 	return types.Sudoku(pzl), nil
 }
 func smartRead(entries string) (s types.Sudoku, err error) {
-	pzl, err := smart.ReadSudoku(entries)
+	pzl, err := twodee_common.GetSmartPuzzle(entries, smart.Solve)
 	if err != nil {
 		return nil, err
 	}
 
 	return types.Sudoku(pzl), nil
 }
+func verysmartRead(entries string) (s types.Sudoku, err error) {
+	pzl, err := twodee_common.GetSmartPuzzle(entries, verysmart.Solve)
+	if err != nil {
+		return nil, err
+	}
+
+	return types.Sudoku(pzl), nil
+}
+
 func robustRead(entries string) (s types.Sudoku, err error) {
 	pzl, err := robust.ReadSudoku(entries)
 	if err != nil {
@@ -73,10 +86,14 @@ func aaaaaahhhhhhh(err error) {
 }
 
 func main() {
+	speed.InitUtils()
+
 	runTestForAllPuzzles(naivePerfomance, twodee.PuzzleSolver)
 	println(`finished naive!`)
 	runTestForAllPuzzles(smartPerfomance, twodee.PuzzleSolver)
 	println(`finished smart!`)
+	runTestForAllPuzzles(verysmartPerfomance, twodee.PuzzleSolver)
+	println(`finished very smart!`)
 	runTestForAllPuzzles(robustPerfomance, twodee.PuzzleSolver)
 	println(`finished robust!`)
 
@@ -84,6 +101,8 @@ func main() {
 	naivePerfomance.printPerformanceStats()
 	println(`SMART STATS`)
 	smartPerfomance.printPerformanceStats()
+	println(`VERY SMART STATS`)
+	verysmartPerfomance.printPerformanceStats()
 	println(`ROBUST STATS`)
 	robustPerfomance.printPerformanceStats()
 }
@@ -124,6 +143,9 @@ func (ap *algoPerformance) printEveryPuzzle() {
 	}
 
 }
+func durToStr(nanoseconds int64) string {
+	return fmt.Sprintf("%9.4fmicroseconds", float64(nanoseconds)/1000.0)
+}
 func (ap *algoPerformance) printAverages() {
 	total := 0
 	totalDur := int64(0)
@@ -138,7 +160,7 @@ func (ap *algoPerformance) printAverages() {
 
 	println(`======AVERAGES======`)
 	println(fmt.Sprintf("Total # tests:        %v", total))
-	println(fmt.Sprintf("Average duration:  %9.4fms", float64(averageDurationNs)/1000000.0))
+	println(fmt.Sprintf("Average duration:  %v", durToStr(averageDurationNs)))
 	println(fmt.Sprintf("Average # Placements: %v", averageNumPlacesNs))
 	println(`====================`)
 }
@@ -184,7 +206,7 @@ func (ap *algoPerformance) printWorstByTime() {
 
 		pi := ap.byTime[key]
 
-		println(fmt.Sprintf("Puzzle #%3v took %9.4fms", pi.puzzleNumber, float64(pi.duration.Nanoseconds())/1000000.0))
+		println(fmt.Sprintf("Puzzle #%3v took %v", pi.puzzleNumber, durToStr(pi.duration.Nanoseconds())))
 		i++
 	}
 }

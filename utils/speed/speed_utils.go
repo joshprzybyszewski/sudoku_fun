@@ -29,7 +29,36 @@ var (
 		eightPresence,
 		ninePresence,
 	}
+
+	presenceToNumFree [constants.FullPresence + 1]numFreeAndPossibleEntries
+	inited = false
 )
+
+type numFreeAndPossibleEntries struct{
+	numFree uint8
+	possibleEntries []types.Entry
+}
+
+func InitUtils() {
+	if inited {
+		return
+	}
+	for p := types.Presence(0); p <= constants.FullPresence; p++ {
+		presenceToNumFree[p] = numFreeAndPossibleEntries{
+			uint8(GetNumFreeSpots(p)),
+			GetPossibleEntriesQuickly(p, constants.EmptyPresence, constants.EmptyPresence),
+		}
+	}
+	inited = true
+}
+
+func GetCachedNumFreeAndPosEntries(presence types.Presence) (int, []types.Entry) {
+	if !inited {
+		InitUtils()
+	}
+	value := presenceToNumFree[presence]
+	return int(value.numFree), value.possibleEntries
+}
 
 func GetPossibleEntries(entries []types.Entry, presence types.Presence) []types.Entry {
 	posEntries := make([]types.Entry, 0, constants.SideLen)
@@ -99,7 +128,7 @@ func GetNumFreeSpots(presence types.Presence) int {
 	numFree := 0
 
 	for _, ePresence := range allEntriesPresence {
-		if IsPresent(presence, ePresence) {
+		if !IsPresent(presence, ePresence) {
 			numFree++
 		}
 	}

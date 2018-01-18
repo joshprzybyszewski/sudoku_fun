@@ -51,7 +51,7 @@ func GetNumFreeSpots(presence types.Presence) int {
 
 	for i := 1; i <= constants.SideLen; i++ {
 		ePresence := PresenceOf(types.Entry(i))
-		if IsPresent(presence, ePresence) {
+		if !IsPresent(presence, ePresence) {
 			numFree += 1
 		}
 	}
