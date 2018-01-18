@@ -13,6 +13,7 @@ import (
 	"./twodee_bitwise/naive"
 	"./twodee_bitwise/robust"
 	"./twodee_bitwise/smart"
+	matt "./matt/sudoku/2d/solver"
 	"./utils"
 	"./utils/types"
 )
@@ -23,6 +24,7 @@ var (
 	naivePerfomance  = &algoPerformance{naiveRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	smartPerfomance  = &algoPerformance{smartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	robustPerfomance = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	mattsPerfomance  = &algoPerformance{mattRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 )
 
 func naiveRead(entries string) (s types.Sudoku, err error) {
@@ -43,6 +45,14 @@ func smartRead(entries string) (s types.Sudoku, err error) {
 }
 func robustRead(entries string) (s types.Sudoku, err error) {
 	pzl, err := robust.ReadSudoku(entries)
+	if err != nil {
+		return nil, err
+	}
+
+	return types.Sudoku(pzl), nil
+}
+func mattRead(entries string) (s types.Sudoku, err error) {
+	pzl, err := matt.ReadSudoku(entries)
 	if err != nil {
 		return nil, err
 	}
@@ -79,6 +89,8 @@ func main() {
 	println(`finished smart!`)
 	runTestForAllPuzzles(robustPerfomance, twodee.PuzzleSolver)
 	println(`finished robust!`)
+	runTestForAllPuzzles(mattsPerfomance, matt.PuzzleSolver)
+	println(`finished matts!`)
 
 	println(`NAIVE STATS`)
 	naivePerfomance.printPerformanceStats()
@@ -86,6 +98,8 @@ func main() {
 	smartPerfomance.printPerformanceStats()
 	println(`ROBUST STATS`)
 	robustPerfomance.printPerformanceStats()
+	println(`MATT STATS`)
+	mattsPerfomance.printPerformanceStats()
 }
 
 func runTestForAllPuzzles(ap *algoPerformance, slvr puzzleSolver) {
