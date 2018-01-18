@@ -5,9 +5,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"../../utils/constants"
-	speedUtils "../../utils/speed"
-	"../../utils/types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
+	speedUtils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 var numPlacements int
