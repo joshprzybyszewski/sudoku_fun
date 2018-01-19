@@ -52,10 +52,6 @@ func (t TakenNumbersItems) Less(i, j int) bool {
 }
 func (t TakenNumbersItems) Swap(i, j int) { t[i], t[j] = t[j], t[i] }
 
-func (b Board) clone() Board {
-	return b
-}
-
 func (t valueHitMap) clone() valueHitMap {
 	return t
 }
