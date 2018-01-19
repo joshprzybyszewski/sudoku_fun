@@ -54,13 +54,7 @@ func (t TakenNumbersItems) Less(i, j int) bool {
 func (t TakenNumbersItems) Swap(i, j int) { t[i], t[j] = t[j], t[i] }
 
 func (b Board) clone() Board {
-	b2 := Board{}
-	for i := 0; i < 9; i++ {
-		for j := 0; j < 9; j++ {
-			b2[i][j] = b[i][j]
-		}
-	}
-	return b2
+	return b
 }
 
 func (t valueHitMap) clone() valueHitMap {
@@ -108,25 +102,14 @@ func (g *Game) Copy() *Game {
 }
 
 func (g *Game) clone() *Game {
-	g2 := NewGame()
-	g2.gameboard = g.gameboard.clone()
-	g2.size = g.size
-
-	for i, rowsSet := range g.rowsSet {
-		g2.rowsSet[i] = rowsSet.clone()
-		g2.colsSet[i] = g.colsSet[i].clone()
+	return &Game{
+		gameboard:      g.gameboard,
+		size:           g.size,
+		rowsSet:        g.rowsSet,
+		colsSet:        g.colsSet,
+		subSquareSets:  g.subSquareSets,
+		individualSets: g.individualSets,
 	}
-	for i, rows := range g.subSquareSets {
-		for j, col := range rows {
-			g2.subSquareSets[i][j] = col.clone()
-		}
-	}
-	for i, rows := range g.individualSets {
-		for j, col := range rows {
-			g2.individualSets[i][j] = col.clone()
-		}
-	}
-	return g2
 }
 
 // IsValid checks if the number is a valid number
