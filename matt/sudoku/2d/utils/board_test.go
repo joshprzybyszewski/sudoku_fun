@@ -196,7 +196,7 @@ func TestNextMoves(t *testing.T) {
 
 	rowGuess, colGuess, valuesGuess := b.NextGuessMove()
 	assert.Equal(t, 0, rowGuess)
-	assert.Equal(t, 2, colGuess)
+	assert.Equal(t, 1, colGuess)
 	assert.Len(t, valuesGuess, 6)
 	for _, v := range []int{2, 3, 5, 6, 8, 9} {
 		assert.Contains(t, valuesGuess, v)
@@ -208,7 +208,7 @@ func TestNextMoves(t *testing.T) {
 
 	rowGuess, colGuess, valuesGuess = b.NextGuessMove()
 	assert.Equal(t, 0, rowGuess)
-	assert.Equal(t, 1, colGuess)
+	assert.Equal(t, 2, colGuess)
 	assert.Len(t, valuesGuess, 5)
 	assert.NotContains(t, valuesGuess, oldGuess)
 }
