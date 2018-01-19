@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -207,28 +206,32 @@ func (g *Game) ValidGame() bool {
 }
 
 func (g *Game) NextGuessMove() (row, col int, values []int) {
-	listOfPossibleGuesses := TakenNumbersItems{}
+	var nextGuess *TakenNumbersItem
 
 	for i := 0; i < 9; i++ {
 		for j := 0; j < 9; j++ {
-			if g.individualSets[i][j] != fullMapping && g.gameboard[i][j] == 0 {
-				listOfPossibleGuesses = append(listOfPossibleGuesses, TakenNumbersItem{
-					list: g.individualSets[i][j],
-					row:  i,
-					col:  j,
-				})
+			locationHitMap := g.individualSets[i][j]
+			if locationHitMap != fullMapping && g.gameboard[i][j] == 0 {
+				totalSet := locationHitMap.numberSet()
+				if nextGuess == nil || totalSet > nextGuess.list.numberSet() {
+					nextGuess = &TakenNumbersItem{
+						list: locationHitMap,
+						row:  i,
+						col:  j,
+					}
+					if totalSet == 8 {
+						break
+					}
+				}
 			}
-			if g.gameboard[i][j] == 0 && g.individualSets[i][j] == fullMapping {
+			if g.gameboard[i][j] == 0 && locationHitMap == fullMapping {
 				return 0, 0, nil
 			}
 		}
 	}
 
-	if len(listOfPossibleGuesses) > 0 {
-		sort.Sort(listOfPossibleGuesses)
-
-		set := listOfPossibleGuesses[0]
-		return set.row, set.col, set.list.inverse().getValues()
+	if nextGuess != nil {
+		return nextGuess.row, nextGuess.col, nextGuess.list.inverse().getValues()
 	}
 	return -1, -1, nil
 }
