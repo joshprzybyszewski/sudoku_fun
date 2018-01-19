@@ -204,30 +204,31 @@ func (g *Game) ValidGame() bool {
 func (g *Game) NextGuessMove() (row, col int, values []int) {
 	var nextGuess *TakenNumbersItem
 
-	for i := 0; i < 9; i++ {
-		for j := 0; j < 9; j++ {
-			locationHitMap := g.individualSets[i][j]
-			if locationHitMap != fullMapping && g.gameboard[i][j] == 0 {
-				totalSet := locationHitMap.numberSet()
-				if nextGuess == nil || totalSet > nextGuess.list.numberSet() {
-					nextGuess = &TakenNumbersItem{
-						list: locationHitMap,
-						row:  i,
-						col:  j,
-					}
-					if totalSet == 8 {
-						break
-					}
-				}
+	for i, iSet := range g.individualSets {
+		for j, locationHitMap := range iSet {
+			if g.gameboard[i][j] != 0 {
+				continue
 			}
-			if g.gameboard[i][j] == 0 && locationHitMap == fullMapping {
+			if locationHitMap == fullMapping {
 				return 0, 0, nil
+			}
+
+			totalSet := locationHitMap.numberSet()
+			if nextGuess == nil || totalSet > nextGuess.list.numberSet() {
+				nextGuess = &TakenNumbersItem{
+					list: locationHitMap,
+					row:  i,
+					col:  j,
+				}
+				if totalSet == 8 {
+					return i, j, locationHitMap.inverse().getValues()
+				}
 			}
 		}
 	}
 
-	if nextGuess != nil {
-		return nextGuess.row, nextGuess.col, nextGuess.list.inverse().getValues()
+	if nextGuess == nil {
+		return -1, -1, nil
 	}
-	return -1, -1, nil
+	return nextGuess.row, nextGuess.col, nextGuess.list.inverse().getValues()
 }
