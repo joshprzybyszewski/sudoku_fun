@@ -185,8 +185,8 @@ func TestNextMoves(t *testing.T) {
 	assert.True(t, ok)
 
 	rowGuess, colGuess, valuesGuess = b.NextGuessMove()
-	assert.Equal(t, 0, rowGuess)
-	assert.Equal(t, 2, colGuess)
+	assert.Equal(t, 1, rowGuess)
+	assert.Equal(t, 1, colGuess)
 	assert.Len(t, valuesGuess, 5)
 	assert.NotContains(t, valuesGuess, oldGuess)
 }
