@@ -182,9 +182,9 @@ func (g *Game) valueSetAt(row, col int) valueHitMap {
 func (g *Game) NextGuessMove() (row, col int, values []int) {
 	var nextGuess *TakenNumbersItem
 
-	for r, row := range g.gameboard {
-		for c, value := range row {
-			if value != 0 {
+	for c := 0;c<9;c++{
+		for r :=0;r<9;r++{
+			if  g.gameboard[r][c] != 0 {
 				continue
 			}
 			locationHitMap := g.valueSetAt(r, c)
