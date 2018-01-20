@@ -6,9 +6,10 @@ go:
 
 before_install:
   - go get -t -v ./...
+  - chmod +x ./scripts/coverage.sh
 
 script:
-  - go test ./... -coverprofile=coverage.txt -covermode=atomic
+  - ./scripts/coverage.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
