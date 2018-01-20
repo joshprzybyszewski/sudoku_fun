@@ -8,7 +8,7 @@ set -e
 echo "mode: atomic" > coverage.txt
 
 for d in $(find ./* -maxdepth 10 -type d -not -path "*vendor*"); do
-    if ls $d/*.go &> /dev/null; then
+    if ls $d/*_test.go &> /dev/null; then
         go test -coverprofile=profile.out -covermode=atomic $d
         if [ -f profile.out ]; then
             echo "$(pwd) FINISHED testing $d"
