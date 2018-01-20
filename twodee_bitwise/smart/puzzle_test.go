@@ -12,10 +12,12 @@ import (
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	utils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/test_utils"
 )
 
 func Test_SmartSolve(t *testing.T) {
 	emptyPuzzle := common.SmartPuzzle{}
+	emptyPuzzle.Solver = Solve
 	emptyPuzzle.NumFreeInRow = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
 	emptyPuzzle.NumFreeInCol = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
 	emptyPuzzle.NumFreeInBox = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
@@ -55,31 +57,33 @@ func Test_SmartSolve(t *testing.T) {
 		[constants.SideLen]uint8{0, 0, 0, 0, 0, 0, 0, 0, 0},
 	}
 
+	completelyEmptyPuzzle := common.SmartPuzzle{}
+	completelyEmptyPuzzle.Solver = Solve
+
 	testCases := []struct {
 		msg           string
 		pzlStr        string
 		isError       bool
-		expFinalState common.SmartPuzzle
+		expFinalState *common.SmartPuzzle
 	}{{
 		msg:           `Empty Puzzle`,
 		pzlStr:        constants.EmptyPuzzle,
 		isError:       false,
-		expFinalState: emptyPuzzle,
+		expFinalState: &emptyPuzzle,
 	}, {
 		msg:           `Sparse Puzzle`,
 		pzlStr:        `....2...9.6....................................................................56`,
 		isError:       false,
-		expFinalState: sparsePuzzle,
+		expFinalState: &sparsePuzzle,
 	}, {
 		msg:           `Solved Puzzle`,
 		pzlStr:        `384179652276358419159462873961785234427913568538624791692541387743896125815237946`,
 		isError:       false,
-		expFinalState: solvedPuzzle,
+		expFinalState: &solvedPuzzle,
 	}, {
 		msg:           `Errored Puzzle`,
 		pzlStr:        `11...............................................................................`,
 		isError:       true,
-		expFinalState: common.SmartPuzzle{},
 	}}
 
 	for _, tc := range testCases {
@@ -89,7 +93,7 @@ func Test_SmartSolve(t *testing.T) {
 			assert.Error(t, err, failMsg)
 		} else {
 			require.NoError(t, err, failMsg)
-			assert.Equal(t, tc.expFinalState, justReadPzl, failMsg)
+			assert.True(t, test_utils.SmartPuzzlesAreEqual(tc.expFinalState, &justReadPzl), failMsg)
 		}
 	}
 }
@@ -104,8 +108,6 @@ func Test_SolveAndHelpers(t *testing.T) {
 		firstPlaceC   int
 		firstPlaceB   int
 		firstPlaceEs  []types.Entry
-		isError       bool
-		expFinalState common.SmartPuzzle
 	}{{
 		msg:           `First Puzzle`,
 		pzlStr:        `..812...9.6.........2..95......8.93....2..68...........564..3....9...41..8..1..56`,
@@ -115,8 +117,6 @@ func Test_SolveAndHelpers(t *testing.T) {
 		firstPlaceC:   6,
 		firstPlaceB:   2,
 		firstPlaceEs:  []types.Entry{7},
-		isError:       false,
-		expFinalState: common.SmartPuzzle{},
 	}, {
 		msg:           `Second Puzzle`,
 		pzlStr:        `...21.83.3.1..5....82.7...54....2..9.78.....4.......1.71...........5.3.1...8..9..`,
@@ -126,8 +126,6 @@ func Test_SolveAndHelpers(t *testing.T) {
 		firstPlaceC:   8,
 		firstPlaceB:   2,
 		firstPlaceEs:  []types.Entry{6, 7},
-		isError:       false,
-		expFinalState: common.SmartPuzzle{},
 	}}
 
 	for _, tc := range testCases {
@@ -138,9 +136,6 @@ func Test_SolveAndHelpers(t *testing.T) {
 
 		assert.Equal(t, tc.startingSize, pzl.GetNumPlacements(), failMsg)
 		assert.Equal(t, tc.pzlStr, pzl.GetSimple(), failMsg)
-
-		pzl.PrintPretty()
-		pzl.PrintSimple()
 
 		emptyR, emptyC, emptyB, err := getEmptyTile(&pzl)
 		require.NoError(t, err, failMsg)

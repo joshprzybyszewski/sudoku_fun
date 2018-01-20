@@ -5,9 +5,8 @@ import (
 
 	"github.com/testify/assert"
 
-	speed_utils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
+	slow_utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
-	"github.com/joshprzybyszewski/sudoku_fun/utils"
 	"fmt"
 	"github.com/testify/require"
 )
@@ -17,7 +16,7 @@ func Test_clone(t *testing.T) {
 	pzl.NumPlaced = 2
 	pzl.Tiles[2][5] = types.Tile(3)
 	pzl.Tiles[7][1] = types.Tile(3)
-	p3 := speed_utils.PresenceOf(3)
+	p3 := slow_utils.PresenceOf(3)
 	pzl.Rows[2] = p3
 	pzl.Rows[7] = p3
 	pzl.Cols[5] = p3
@@ -31,22 +30,22 @@ func Test_clone(t *testing.T) {
 }
 
 func Test_place(t *testing.T) {
-	var pzl1 common.SmartPuzzle
-	var pzl2s, pzl2f common.SmartPuzzle
+	var pzl1 SmartPuzzle
+	var pzl2s, pzl2f SmartPuzzle
 
 	pzl1.Tiles[0][0] = types.Tile(4)
-	pzl1.Rows[3] = utils.PresenceOf(5)
-	pzl1.Cols[3] = utils.PresenceOf(5)
-	pzl1.Boxs[8] = utils.PresenceOf(5)
+	pzl1.Rows[3] = slow_utils.PresenceOf(5)
+	pzl1.Cols[3] = slow_utils.PresenceOf(5)
+	pzl1.Boxs[8] = slow_utils.PresenceOf(5)
 
 	pzl2s.NumFreeInRow[6] = 1
 	pzl2s.NumFreeInCol[6] = 1
 	pzl2s.NumFreeInBox[8] = 1
 
 	pzl2f.Tiles[6][6] = types.Tile(3)
-	pzl2f.Rows[6] = utils.PresenceOf(3)
-	pzl2f.Cols[6] = utils.PresenceOf(3)
-	pzl2f.Boxs[8] = utils.PresenceOf(3)
+	pzl2f.Rows[6] = slow_utils.PresenceOf(3)
+	pzl2f.Cols[6] = slow_utils.PresenceOf(3)
+	pzl2f.Boxs[8] = slow_utils.PresenceOf(3)
 	pzl2f.NumPlaced = 1
 
 	testCases := []struct {
@@ -55,10 +54,10 @@ func Test_place(t *testing.T) {
 		col           int
 		box           int
 		entry         types.Entry
-		pzzl          common.SmartPuzzle
+		pzzl          SmartPuzzle
 		isError       bool
 		expVal        bool
-		expFinalState common.SmartPuzzle
+		expFinalState SmartPuzzle
 	}{{
 		msg:           `On a tile that has been placed`,
 		row:           0,
