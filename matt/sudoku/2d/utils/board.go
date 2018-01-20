@@ -57,11 +57,11 @@ func (t valueHitMap) clone() valueHitMap {
 }
 
 type Game struct {
-	size           int
-	gameboard      Board
-	rowsSet        [9]valueHitMap
-	colsSet        [9]valueHitMap
-	subSquareSets  [3][3]valueHitMap
+	size          int
+	gameboard     Board
+	rowsSet       [9]valueHitMap
+	colsSet       [9]valueHitMap
+	subSquareSets [3][3]valueHitMap
 }
 
 func NewGame() *Game {
@@ -70,10 +70,10 @@ func NewGame() *Game {
 
 func NewGameWithState(board Board) *Game {
 	g := &Game{
-		gameboard:      Board{},
-		rowsSet:        [9]valueHitMap{},
-		colsSet:        [9]valueHitMap{},
-		subSquareSets:  [3][3]valueHitMap{},
+		gameboard:     Board{},
+		rowsSet:       [9]valueHitMap{},
+		colsSet:       [9]valueHitMap{},
+		subSquareSets: [3][3]valueHitMap{},
 	}
 
 	for r, row := range board {
@@ -94,11 +94,11 @@ func (g *Game) Copy() *Game {
 
 func (g *Game) clone() *Game {
 	return &Game{
-		gameboard:      g.gameboard,
-		size:           g.size,
-		rowsSet:        g.rowsSet,
-		colsSet:        g.colsSet,
-		subSquareSets:  g.subSquareSets,
+		gameboard:     g.gameboard,
+		size:          g.size,
+		rowsSet:       g.rowsSet,
+		colsSet:       g.colsSet,
+		subSquareSets: g.subSquareSets,
 	}
 }
 
@@ -124,7 +124,7 @@ func (g *Game) IsValid(row, col, value int) bool {
 	// if this is an invalid value for this location
 	// or if this location is already set
 	// early out
-	if  g.GetValue(row, col) > 0 {
+	if g.GetValue(row, col) > 0 {
 		return false
 	}
 
@@ -176,15 +176,15 @@ func (g *Game) ValidGame() bool {
 }
 
 func (g *Game) valueSetAt(row, col int) valueHitMap {
-	return g.rowsSet[row] | g.colsSet[col]| g.subSquareSets[row/3][col/3]
+	return g.rowsSet[row] | g.colsSet[col] | g.subSquareSets[row/3][col/3]
 }
 
 func (g *Game) NextGuessMove() (row, col int, values []int) {
 	var nextGuess *TakenNumbersItem
 
-	for c := 0;c<9;c++{
-		for r :=0;r<9;r++{
-			if  g.gameboard[r][c] != 0 {
+	for c := 0; c < 9; c++ {
+		for r := 0; r < 9; r++ {
+			if g.gameboard[r][c] != 0 {
 				continue
 			}
 			locationHitMap := g.valueSetAt(r, c)
