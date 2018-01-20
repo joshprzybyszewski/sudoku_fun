@@ -3,7 +3,7 @@ package common
 import (
 	"testing"
 
-	"github.com/testify/assert"
+	"github.com/stretchr/testify/assert"
 
 	"fmt"
 	slow_utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"

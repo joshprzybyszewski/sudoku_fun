@@ -1,9 +1,9 @@
 package robust
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
-	"errors"
 
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"

@@ -1,8 +1,8 @@
 package slow
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
