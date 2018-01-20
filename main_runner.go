@@ -18,6 +18,7 @@ import (
 	"github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/speed"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
+	"github.com/joshprzybyszewski/sudoku_fun/threedee"
 )
 
 var (
@@ -87,6 +88,12 @@ func aaaaaahhhhhhh(err error) {
 
 func main() {
 	speed.InitUtils()
+
+	b, err := threedee.FindPuzzle()
+	if err != nil || !b {
+		return
+	}
+	return
 
 	runTestForAllPuzzles(naivePerfomance, twodee.PuzzleSolver)
 	println(`finished naive!`)
