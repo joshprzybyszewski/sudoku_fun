@@ -15,7 +15,7 @@ type SolverFn func(*SmartPuzzle) (solution *SmartPuzzle, err error)
 
 type SmartPuzzle struct {
 	NumPlaced int
-	solver    SolverFn
+	Solver    SolverFn
 
 	Tiles [constants.SideLen][constants.SideLen]types.Tile /* [row][col] */
 
