@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"fmt"
 	slow_utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
-	"github.com/testify/require"
 )
 
 func Test_clone(t *testing.T) {
