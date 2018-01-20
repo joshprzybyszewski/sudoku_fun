@@ -2,7 +2,7 @@ package slow
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"

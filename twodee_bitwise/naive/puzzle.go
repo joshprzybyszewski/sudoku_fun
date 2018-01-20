@@ -3,8 +3,7 @@ package naive
 import (
 	"fmt"
 	"strconv"
-
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"
