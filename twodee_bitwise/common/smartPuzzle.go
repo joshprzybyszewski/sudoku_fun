@@ -15,7 +15,7 @@ type SolverFn func(*SmartPuzzle) (solution *SmartPuzzle, err error)
 
 type SmartPuzzle struct {
 	NumPlaced int
-	solver    SolverFn
+	Solver    SolverFn
 
 	Tiles [constants.SideLen][constants.SideLen]types.Tile /* [row][col] */
 
@@ -37,13 +37,14 @@ func newPuzzle(slvr SolverFn) SmartPuzzle {
 		pzl.NumFreeInBox[i] = constants.SideLen
 	}
 
-	pzl.solver = slvr
+	pzl.Solver = slvr
 
 	return pzl
 }
 
 /// Reads in sudoku from a string representation of it
 func GetSmartPuzzle(str string, slvr SolverFn) (p SmartPuzzle, err error) {
+	numAttempts = 0
 	pzl := newPuzzle(slvr)
 	for i := 0; i < len(str); i++ {
 		entryChar := string(str[i])
@@ -115,7 +116,7 @@ func (p SmartPuzzle) PrintPretty() {
 
 func (p SmartPuzzle) Solve() (solution types.Sudoku, err error) {
 	numAttempts = 0
-	return p.solver(&p)
+	return p.Solver(&p)
 }
 
 func (p *SmartPuzzle) entryIsPresent(row, col, box int, ePresence types.Presence) error {

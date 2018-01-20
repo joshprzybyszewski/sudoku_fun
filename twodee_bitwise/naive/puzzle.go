@@ -1,10 +1,9 @@
 package naive
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
-
-	"github.com/pkg/errors"
 
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"
