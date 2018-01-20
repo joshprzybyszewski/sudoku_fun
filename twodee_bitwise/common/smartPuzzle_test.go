@@ -5,9 +5,9 @@ import (
 
 	"github.com/testify/assert"
 
+	"fmt"
 	slow_utils "github.com/joshprzybyszewski/sudoku_fun/utils/slow"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
-	"fmt"
 	"github.com/testify/require"
 )
 

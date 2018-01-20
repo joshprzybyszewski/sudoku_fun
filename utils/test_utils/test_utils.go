@@ -1,9 +1,9 @@
 package test_utils
 
 import (
+	"fmt"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/common"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
-	"fmt"
 )
 
 func SmartPuzzlesAreEqual(exp, act *common.SmartPuzzle) bool {

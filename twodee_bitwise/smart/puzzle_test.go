@@ -11,8 +11,8 @@ import (
 	brute "github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	utils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
-	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/test_utils"
+	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
 func Test_SmartSolve(t *testing.T) {
@@ -81,9 +81,9 @@ func Test_SmartSolve(t *testing.T) {
 		isError:       false,
 		expFinalState: &solvedPuzzle,
 	}, {
-		msg:           `Errored Puzzle`,
-		pzlStr:        `11...............................................................................`,
-		isError:       true,
+		msg:     `Errored Puzzle`,
+		pzlStr:  `11...............................................................................`,
+		isError: true,
 	}}
 
 	for _, tc := range testCases {
@@ -100,32 +100,32 @@ func Test_SmartSolve(t *testing.T) {
 
 func Test_SolveAndHelpers(t *testing.T) {
 	testCases := []struct {
-		msg           string
-		pzlStr        string
-		solutionStr   string
-		startingSize  int
-		firstPlaceR   int
-		firstPlaceC   int
-		firstPlaceB   int
-		firstPlaceEs  []types.Entry
+		msg          string
+		pzlStr       string
+		solutionStr  string
+		startingSize int
+		firstPlaceR  int
+		firstPlaceC  int
+		firstPlaceB  int
+		firstPlaceEs []types.Entry
 	}{{
-		msg:           `First Puzzle`,
-		pzlStr:        `..812...9.6.........2..95......8.93....2..68...........564..3....9...41..8..1..56`,
-		solutionStr:   `348125769965347821712869543621784935573291684894536172156472398239658417487913256`,
-		startingSize:  25,
-		firstPlaceR:   0,
-		firstPlaceC:   6,
-		firstPlaceB:   2,
-		firstPlaceEs:  []types.Entry{7},
+		msg:          `First Puzzle`,
+		pzlStr:       `..812...9.6.........2..95......8.93....2..68...........564..3....9...41..8..1..56`,
+		solutionStr:  `348125769965347821712869543621784935573291684894536172156472398239658417487913256`,
+		startingSize: 25,
+		firstPlaceR:  0,
+		firstPlaceC:  6,
+		firstPlaceB:  2,
+		firstPlaceEs: []types.Entry{7},
 	}, {
-		msg:           `Second Puzzle`,
-		pzlStr:        `...21.83.3.1..5....82.7...54....2..9.78.....4.......1.71...........5.3.1...8..9..`,
-		solutionStr:   `957214836341685297682379145435162789178593624296748513713926458829457361564831972`,
-		startingSize:  25,
-		firstPlaceR:   0,
-		firstPlaceC:   8,
-		firstPlaceB:   2,
-		firstPlaceEs:  []types.Entry{6, 7},
+		msg:          `Second Puzzle`,
+		pzlStr:       `...21.83.3.1..5....82.7...54....2..9.78.....4.......1.71...........5.3.1...8..9..`,
+		solutionStr:  `957214836341685297682379145435162789178593624296748513713926458829457361564831972`,
+		startingSize: 25,
+		firstPlaceR:  0,
+		firstPlaceC:  8,
+		firstPlaceB:  2,
+		firstPlaceEs: []types.Entry{6, 7},
 	}}
 
 	for _, tc := range testCases {
