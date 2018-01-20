@@ -9,7 +9,7 @@ before_install:
   - chmod +x ./scripts/coverage.sh
 
 script:
-  - go test  -coverprofile=profile.out -covermode=atomic ./...
+  - ./scripts/coverage.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
