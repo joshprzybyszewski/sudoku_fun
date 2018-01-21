@@ -1,11 +1,12 @@
 # sudoku_fun
+[![Build Status][travis-image]][travis-url] [![codecov.io](https://codecov.io/github/joshprzybyszewski/sudoku_fun/coverage.svg?branch=master)](https://codecov.io/gh/joshprzybyszewski/sudoku_fun/codecov.io?branch=master)
 
 A sudoku solver using [Go](https://golang.org/).
 
-# How It Works
+## How It Works
 Simple! Forget about storage space and care only about speed!
 
-## What we store on each `Puzzle`:
+### What we store on each `Puzzle`:
  - the `Entry` in each `Tile`.
    - An `Entry` is an `int`, since I don't care about input.
    - A `Tile` is a `uint8`, since we only need numbers 0 through 9 (where 0 is an empty `Tile`).
@@ -24,7 +25,7 @@ Simple! Forget about storage space and care only about speed!
  - the number of open spots in each col.
  - the number of open spots in each box.
  
-## Solving Algorithm
+### Solving Algorithm
  Base Case: The puzzle has the number of entries equal to the number of tiles
   - Assume the puzzle is solved and return the `Puzzle`
   
@@ -44,12 +45,12 @@ Simple! Forget about storage space and care only about speed!
     - If that returns a valid solution, pass that on up
     - Else, continue with the foreach loop because we are guaranteed one of the possible entries goes in this location
 
-# How To Run
+## How To Run
  1. Make sure this is in your machine's Go path.
  2. Running `go run main_runner.go` will solve all the puzzles in the example file.
  
- # Contributing
- Don't.
+## Contributing
+ This is primarily used for personal purposes. Please feel free to look through the code and use it for yourself, but don't expect me to respond to issues or pull requests.
  
- # Why Did I Make This?
+## Why Did I Make This?
  A coworker and I want to try solving three dimensional Sudokus, if that's possible. So we're in a little friendly competition about who can write the better two dimensional solver. His solves in 120ms, but mine's at 9ms on average.
