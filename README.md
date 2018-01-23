@@ -1,5 +1,5 @@
 # sudoku_fun
-[![Build Status][travis-image]][travis-url] [![codecov.io](https://codecov.io/github/joshprzybyszewski/sudoku_fun/coverage.svg?branch=master)](https://codecov.io/gh/joshprzybyszewski/sudoku_fun/codecov.io?branch=master)
+[![codecov](https://codecov.io/gh/joshprzybyszewski/sudoku_fun/branch/master/graph/badge.svg)](https://codecov.io/gh/joshprzybyszewski/sudoku_fun)
 
 A sudoku solver using [Go](https://golang.org/).
 
