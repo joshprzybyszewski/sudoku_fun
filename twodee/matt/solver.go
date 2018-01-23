@@ -1,4 +1,4 @@
-package solver
+package matt
 
 import (
 	"bufio"
@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/utils"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/matt/utils"
 
 	"github.com/joshprzybyszewski/sudoku_fun/twodee"
 	joshUtils "github.com/joshprzybyszewski/sudoku_fun/utils"

@@ -9,9 +9,9 @@ import (
 	"sort"
 	"time"
 
-	matt "github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/solver"
-	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee"
 	twodee_common "github.com/joshprzybyszewski/sudoku_fun/twodee/common"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/matt"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee/naive"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee/robust"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee/smart"
