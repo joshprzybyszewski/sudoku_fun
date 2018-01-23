@@ -1,4 +1,4 @@
-package verysmart
+package smart
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/common"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/common"
 	brute "github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	utils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
@@ -15,7 +15,7 @@ import (
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
 )
 
-func Test_VerySmartSolve(t *testing.T) {
+func Test_SmartSolve(t *testing.T) {
 	emptyPuzzle := common.SmartPuzzle{}
 	emptyPuzzle.Solver = Solve
 	emptyPuzzle.NumFreeInRow = [constants.SideLen]uint8{9, 9, 9, 9, 9, 9, 9, 9, 9}
@@ -57,6 +57,9 @@ func Test_VerySmartSolve(t *testing.T) {
 		[constants.SideLen]uint8{0, 0, 0, 0, 0, 0, 0, 0, 0},
 	}
 
+	completelyEmptyPuzzle := common.SmartPuzzle{}
+	completelyEmptyPuzzle.Solver = Solve
+
 	testCases := []struct {
 		msg           string
 		pzlStr        string
@@ -78,10 +81,9 @@ func Test_VerySmartSolve(t *testing.T) {
 		isError:       false,
 		expFinalState: &solvedPuzzle,
 	}, {
-		msg:           `Errored Puzzle`,
-		pzlStr:        `11...............................................................................`,
-		isError:       true,
-		expFinalState: nil,
+		msg:     `Errored Puzzle`,
+		pzlStr:  `11...............................................................................`,
+		isError: true,
 	}}
 
 	for _, tc := range testCases {
@@ -97,9 +99,6 @@ func Test_VerySmartSolve(t *testing.T) {
 }
 
 func Test_SolveAndHelpers(t *testing.T) {
-	// be sure to init my cache
-	utils.InitUtils()
-
 	testCases := []struct {
 		msg          string
 		pzlStr       string
@@ -138,12 +137,18 @@ func Test_SolveAndHelpers(t *testing.T) {
 		assert.Equal(t, tc.startingSize, pzl.GetNumPlacements(), failMsg)
 		assert.Equal(t, tc.pzlStr, pzl.GetSimple(), failMsg)
 
-		locR, locC, locB, es, err := getLocationAndEntriesVerySmart(&pzl)
+		emptyR, emptyC, emptyB, err := getEmptyTile(&pzl)
 		require.NoError(t, err, failMsg)
-		assert.Equal(t, tc.firstPlaceR, locR, failMsg)
-		assert.Equal(t, tc.firstPlaceC, locC, failMsg)
-		assert.Equal(t, tc.firstPlaceB, locB, failMsg)
+		assert.Equal(t, tc.firstPlaceR, emptyR, failMsg)
+		assert.Equal(t, tc.firstPlaceC, emptyC, failMsg)
+		assert.Equal(t, tc.firstPlaceB, emptyB, failMsg)
+
+		locR, locC, locB, es, err := getLocationAndEntries(&pzl)
+		require.NoError(t, err, failMsg)
 		assert.Equal(t, tc.firstPlaceEs, es, failMsg)
+		assert.Equal(t, emptyR, locR, failMsg)
+		assert.Equal(t, emptyC, locC, failMsg)
+		assert.Equal(t, emptyB, locB, failMsg)
 
 		solution, err := pzl.Solve()
 		require.NoError(t, err, failMsg)

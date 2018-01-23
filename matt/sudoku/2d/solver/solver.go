@@ -13,7 +13,7 @@ import (
 
 	"github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/utils"
 
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee"
 	joshUtils "github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 )
@@ -105,11 +105,11 @@ func readPuzzle(line string) (*utils.Board, error) {
 
 type BoardReader func(str string) (p *utils.Board, err error)
 
-func PuzzleSolver(_ twodee_bitwise.SudokuReader, sudokuPuzzle string) (*time.Duration, int, string) {
+func PuzzleSolver(_ twodee.SudokuReader, sudokuPuzzle string) (*time.Duration, int, string, error) {
 	board, err := readPuzzle(sudokuPuzzle)
 	if err != nil {
 		println(`BAD SUDOKU!!`)
-		return nil, 0, ``
+		return nil, 0, ``, nil
 	}
 
 	t0 := time.Now()
@@ -118,7 +118,7 @@ func PuzzleSolver(_ twodee_bitwise.SudokuReader, sudokuPuzzle string) (*time.Dur
 
 	if err != nil {
 		println(fmt.Sprintf("COULDN'T SOLVE: %v", err.Error()))
-		return nil, -1, constants.EmptyPuzzle
+		return nil, -1, constants.EmptyPuzzle, nil
 	}
 
 	solutionStr := toString(&solvedBoard)
@@ -126,10 +126,10 @@ func PuzzleSolver(_ twodee_bitwise.SudokuReader, sudokuPuzzle string) (*time.Dur
 	if !joshUtils.BruteForceCheck(solutionStr) {
 		println(solutionStr)
 		println(`WARNING IT DIDN'T ACTUALLY SOLVE'`)
-		return nil, -1, constants.EmptyPuzzle
+		return nil, -1, constants.EmptyPuzzle, nil
 	}
 
-	return &duration, int(attempts), solutionStr
+	return &duration, int(attempts), solutionStr, nil
 }
 
 func toString(board *utils.Board) string {

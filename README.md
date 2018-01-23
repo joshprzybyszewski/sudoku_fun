@@ -8,16 +8,16 @@ We've established different algorithms for solving sudokus, both 2D and 3D.
 At the moment, we only have functioning 2d solutions, but we're thinking about how to solve 3d and what the standards of completion will be.
 
 ### Josh's 2D solutions
- [Naive](./twodee_bitwise/naive/README.md)
+ [Naive](./twodee/naive/README.md)
   _This just chooses the next location by finding the next open spot. Very stoopid._
 
- [Smart](./twodee_bitwise/smart/README.md)
+ [Smart](./twodee/smart/README.md)
   _Scans the puzzle for the a good open spot to attempt next placement._
 
- [Robust](./twodee_bitwise/robust/README.md)
+ [Robust](./twodee/robust/README.md)
   _Branch from Smart. Completes every error check along the way. This solution checks every err != nil and adds ~25% of execution time._
 
- [Very Smart](./twodee_bitwise/verysmart/README.md)
+ [Very Smart](./twodee/verysmart/README.md)
   _Checks every Tile to find the best location to attempt placement and uses a cache to find the possible entries._
 
 ### Matt's 2D Solution
