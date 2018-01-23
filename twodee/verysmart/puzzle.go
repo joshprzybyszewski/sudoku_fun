@@ -3,7 +3,7 @@ package verysmart
 import (
 	"errors"
 
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/common"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/common"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/constants"
 	speedUtils "github.com/joshprzybyszewski/sudoku_fun/utils/speed"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"

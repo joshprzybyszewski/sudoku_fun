@@ -1,4 +1,4 @@
-package main
+package stats
 
 import (
 	"bufio"
@@ -9,13 +9,13 @@ import (
 	"sort"
 	"time"
 
-	matt "github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/solver"
-	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
-	twodee_common "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/common"
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/naive"
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/robust"
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/smart"
-	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/verysmart"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee"
+	twodee_common "github.com/joshprzybyszewski/sudoku_fun/twodee/common"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/matt"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/naive"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/robust"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/smart"
+	"github.com/joshprzybyszewski/sudoku_fun/twodee/verysmart"
 	"github.com/joshprzybyszewski/sudoku_fun/utils"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/speed"
 	"github.com/joshprzybyszewski/sudoku_fun/utils/types"
@@ -29,6 +29,8 @@ var (
 	verysmartPerfomance = &algoPerformance{verysmartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	robustPerfomance    = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	mattsPerfomance     = &algoPerformance{mattRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+
+	shouldAlertAboutBadAlgorithm = false
 )
 
 func naiveRead(entries string) (s types.Sudoku, err error) {
@@ -82,7 +84,7 @@ type puzzleInfo struct {
 	puzzleNumber  int
 }
 
-type puzzleSolver func(readPuzzle twodee.SudokuReader, singleLinePzl string) (executionTime *time.Duration, numPlacements int, solutionString string)
+type puzzleSolver func(readPuzzle twodee.SudokuReader, singleLinePzl string) (executionTime *time.Duration, numPlacements int, solutionString string, err error)
 
 func aaaaaahhhhhhh(err error) {
 	if err != nil {
@@ -90,30 +92,34 @@ func aaaaaahhhhhhh(err error) {
 	}
 }
 
-func main() {
+func TwoDeeAlgoSpeedStats() {
 	speed.InitUtils()
 
 	runTestForAllPuzzles(naivePerfomance, twodee.PuzzleSolver)
 	println(`finished naive!`)
+	runTestForAllPuzzles(robustPerfomance, twodee.PuzzleSolver)
+	println(`finished robust!`)
 	runTestForAllPuzzles(smartPerfomance, twodee.PuzzleSolver)
 	println(`finished smart!`)
 	runTestForAllPuzzles(verysmartPerfomance, twodee.PuzzleSolver)
 	println(`finished very smart!`)
-	runTestForAllPuzzles(robustPerfomance, twodee.PuzzleSolver)
-	println(`finished robust!`)
 	runTestForAllPuzzles(mattsPerfomance, matt.PuzzleSolver)
 	println(`finished matts!`)
 
 	println(`NAIVE STATS`)
 	naivePerfomance.printPerformanceStats()
+	println(`ROBUST STATS`)
+	robustPerfomance.printPerformanceStats()
 	println(`SMART STATS`)
 	smartPerfomance.printPerformanceStats()
 	println(`VERY SMART STATS`)
 	verysmartPerfomance.printPerformanceStats()
-	println(`ROBUST STATS`)
-	robustPerfomance.printPerformanceStats()
 	println(`MATT STATS`)
 	mattsPerfomance.printPerformanceStats()
+
+	if shouldAlertAboutBadAlgorithm {
+		println(`SOMETHING BAD HAPPENED`)
+	}
 }
 
 func runTestForAllPuzzles(ap *algoPerformance, slvr puzzleSolver) {
@@ -131,7 +137,13 @@ func runTestForAllPuzzles(ap *algoPerformance, slvr puzzleSolver) {
 		}
 		aaaaaahhhhhhh(err)
 
-		dur, num, str := slvr(ap.readPuzzle, string(line))
+		dur, num, str, err := slvr(ap.readPuzzle, string(line))
+		if err != nil {
+			println(fmt.Sprintf("Your algorithm is broken: %v", err.Error()))
+			shouldAlertAboutBadAlgorithm = true
+			continue
+		}
+
 		pi := puzzleInfo{dur, num, str, i}
 		ap.byTime[dur.Nanoseconds()] = pi
 		ap.byNumPlacements[num] = pi
