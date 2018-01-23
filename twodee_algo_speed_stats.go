@@ -92,7 +92,7 @@ func aaaaaahhhhhhh(err error) {
 	}
 }
 
-func main() {
+func TwoDeeAlgoSpeedStats() {
 	speed.InitUtils()
 
 	runTestForAllPuzzles(naivePerfomance, twodee.PuzzleSolver)

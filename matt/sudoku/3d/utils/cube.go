@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	utils2D "github.com/joshprzybyszewski/sudoku_fun/twodee/matt/utils"
+	utils2D "github.com/joshprzybyszewski/sudoku_fun/utils/matt"
 )
 
 type Cube struct {

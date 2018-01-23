@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/joshprzybyszewski/sudoku_fun/twodee/matt/utils"
+	utils "github.com/joshprzybyszewski/sudoku_fun/utils/matt"
 
 	"github.com/joshprzybyszewski/sudoku_fun/twodee"
 	joshUtils "github.com/joshprzybyszewski/sudoku_fun/utils"
