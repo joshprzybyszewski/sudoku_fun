@@ -148,28 +148,6 @@ func TestNewWithStateHitMap(t *testing.T) {
 			assert.Equal(t, emptyMapping, b.subSquareSets[i][j])
 		}
 	}
-
-	for j := 0; j < 9; j++ {
-		assert.Equal(t, oneMapping|twoMapping|threeMapping, b.individualSets[0][j])
-	}
-
-	for i := 1; i < 9; i++ {
-		if i < 3 {
-			for j := 0; j < 3; j++ {
-				assert.Equal(t, oneMapping|twoMapping|threeMapping, b.individualSets[i][j])
-			}
-			for j := 3; j < 9; j++ {
-				assert.Equal(t, emptyMapping, b.individualSets[i][j])
-			}
-		} else {
-			assert.Equal(t, oneMapping, b.individualSets[i][0])
-			assert.Equal(t, twoMapping, b.individualSets[i][1])
-			assert.Equal(t, threeMapping, b.individualSets[i][2])
-			for j := 3; j < 9; j++ {
-				assert.Equal(t, emptyMapping, b.individualSets[i][j])
-			}
-		}
-	}
 }
 
 func TestNextMoves(t *testing.T) {
@@ -196,7 +174,7 @@ func TestNextMoves(t *testing.T) {
 
 	rowGuess, colGuess, valuesGuess := b.NextGuessMove()
 	assert.Equal(t, 0, rowGuess)
-	assert.Equal(t, 2, colGuess)
+	assert.Equal(t, 1, colGuess)
 	assert.Len(t, valuesGuess, 6)
 	for _, v := range []int{2, 3, 5, 6, 8, 9} {
 		assert.Contains(t, valuesGuess, v)
@@ -207,7 +185,7 @@ func TestNextMoves(t *testing.T) {
 	assert.True(t, ok)
 
 	rowGuess, colGuess, valuesGuess = b.NextGuessMove()
-	assert.Equal(t, 0, rowGuess)
+	assert.Equal(t, 1, rowGuess)
 	assert.Equal(t, 1, colGuess)
 	assert.Len(t, valuesGuess, 5)
 	assert.NotContains(t, valuesGuess, oldGuess)
