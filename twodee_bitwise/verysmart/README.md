@@ -11,7 +11,7 @@ Now, we scan every Tile to find the single location with the fewest possible ent
 
 How do we do that efficiently?
  1. Initialize a table of all 512 Presence options (remember, Presence is just an int, so this is literally just an array).
-   - The table contains the number of possible entries for that presence, and a list of what those entries are.
-   - We do this once before we start solving puzzles.
+    - The table contains the number of possible entries for that presence, and a list of what those entries are.
+    - We do this once before we start solving puzzles.
  2. Pass in the OR of the presences of each Tile to that cached table: (row|col|box)
  3. If we encounter a Tile with only one possible entry, choose that Tile immediately and break out of the r X c loop.
