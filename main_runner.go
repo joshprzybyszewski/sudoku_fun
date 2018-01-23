@@ -9,6 +9,7 @@ import (
 	"sort"
 	"time"
 
+	matt "github.com/joshprzybyszewski/sudoku_fun/matt/sudoku/2d/solver"
 	twodee "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise"
 	twodee_common "github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/common"
 	"github.com/joshprzybyszewski/sudoku_fun/twodee_bitwise/naive"
@@ -27,6 +28,7 @@ var (
 	smartPerfomance     = &algoPerformance{smartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	verysmartPerfomance = &algoPerformance{verysmartRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 	robustPerfomance    = &algoPerformance{robustRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
+	mattsPerfomance     = &algoPerformance{mattRead, map[int64]puzzleInfo{}, map[int]puzzleInfo{}, map[int]puzzleInfo{}}
 )
 
 func naiveRead(entries string) (s types.Sudoku, err error) {
@@ -62,6 +64,9 @@ func robustRead(entries string) (s types.Sudoku, err error) {
 
 	return types.Sudoku(pzl), nil
 }
+func mattRead(_ string) (s types.Sudoku, err error) {
+	return nil, nil
+}
 
 type algoPerformance struct {
 	readPuzzle      twodee.SudokuReader
@@ -96,6 +101,8 @@ func main() {
 	println(`finished very smart!`)
 	runTestForAllPuzzles(robustPerfomance, twodee.PuzzleSolver)
 	println(`finished robust!`)
+	runTestForAllPuzzles(mattsPerfomance, matt.PuzzleSolver)
+	println(`finished matts!`)
 
 	println(`NAIVE STATS`)
 	naivePerfomance.printPerformanceStats()
@@ -105,6 +112,8 @@ func main() {
 	verysmartPerfomance.printPerformanceStats()
 	println(`ROBUST STATS`)
 	robustPerfomance.printPerformanceStats()
+	println(`MATT STATS`)
+	mattsPerfomance.printPerformanceStats()
 }
 
 func runTestForAllPuzzles(ap *algoPerformance, slvr puzzleSolver) {
